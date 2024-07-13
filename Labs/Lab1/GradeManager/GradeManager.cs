@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GradeManager
 {
-    public class Program
+    public class GradeManager
     {
         private static readonly string applicationName = "Grade Manager"; //Declare application name as a string, make global and readonly as this value will not change.
         private static bool exit = false; // Create a boolean (true or false value, see Week 1 code under Booleans) called "exit", set to false by default as we want application to continue to run until we want to exit
@@ -111,7 +111,6 @@ namespace GradeManager
 
         private static void Exit()
         {
-            Console.WriteLine("Exit method is called.");
             Console.WriteLine("Good Bye!");
             exit = true; //Set exit to true so application will exit.
         }
