@@ -11,6 +11,9 @@ namespace GradeManager
         private string _firstName {  get; set; } //Private field names should start with underscore (_)
         private string _lastName { get; set; }
 
+        private double _average { get; set; }
+        private List<int> _grades { get; set; } //For lists, see: https://www.tutorialsteacher.com/csharp/csharp-list or https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0
+
         // Constructors: See Constructor section in Week1 code for more info
 
         public Student()
@@ -49,6 +52,31 @@ namespace GradeManager
         {
             return _lastName;
         }
+
+        public void AddGrade(int grade)
+        {
+            _grades.Add(grade);
+        }
+
+        public double GetAverage()
+        {
+            double average = 0; //Default average to 0
+            double totalPoints = 0; // To keep track of total grade points to compute the average
+
+            foreach (int grade in _grades) //See ForEach in Week1 code
+            {
+                totalPoints += grade; // Add up all the student points for the student. This is the same as totalPoints = totalPoints + grade;
+            }
+
+            // Compute the average
+            int gradeCount = _grades.Count; // Gets the number of grades in the _grades List, assign it to an int variable called "gradeCount"
+
+            average = totalPoints / gradeCount; // Calculate the average by dividing total points by the number of grades.
+            
+            return average;
+
+        }
+
     }
 
     

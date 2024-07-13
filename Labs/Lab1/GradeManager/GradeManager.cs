@@ -16,6 +16,14 @@ namespace GradeManager
             Console.WriteLine(applicationName); //Print application name on first line
             Console.WriteLine(new String('-', applicationName.Length)); //Print line on name equal to length of application name. This is a dynamically-built string. We are creating a String object, calling the String class constructor with the new keyword. It is accepting two parameters, the first is a character to print, the second is an integer representing the count of characters to build the string. The Length property on the applicationName string gives us the integer count of applicationName so the count of dashes matches the length of the title.
             Console.WriteLine('\n'); // Create 2 blank lines to start menu. WriteLine method call does first blank line, extra '\n' (newline character) creates second blank line (like hitting Enter twice on a keyboard).
+
+            // Create some students
+            Student student1 = new Student("Tavish", "Misra");
+            Student student2 = new Student("Jibreel", "Muhammad");
+            Student student3 = new Student("Hassan", "Fofana");
+            Student student4 = new Student("Jarvis", "Potter");
+            Student student5 = new Student("Greg", "Leeker");
+
             while(!exit) // Keep menu running after each choice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
             {
                 Menu();
