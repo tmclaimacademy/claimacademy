@@ -12,7 +12,7 @@ namespace GradeManager
         private string _lastName { get; set; }
 
         private double _average { get; set; }
-        private List<int> _grades { get; set; } //For lists, see: https://www.tutorialsteacher.com/csharp/csharp-list or https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0
+        private List<int> _grades = new List<int>(); //For lists, see: https://www.tutorialsteacher.com/csharp/csharp-list or https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0
 
         // Constructors: See Constructor section in Week1 code for more info
 
@@ -56,6 +56,11 @@ namespace GradeManager
         public void AddGrade(int grade) //void method as List's built-in Add method doesn't require a new list to be returned.
         {
             _grades.Add(grade);
+        }
+
+        public List<int> GetGrades()
+        {
+            return _grades;
         }
 
         public double GetAverage()

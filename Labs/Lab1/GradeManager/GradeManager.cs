@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,13 +31,13 @@ namespace GradeManager
 
             while(!exit) // Keep menu running after each choice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
             {
-                Menu();
+                Menu(students);
             }
         }
 
         // Methods for features. We can make these private rather than public because we are not calling these methods outside of this class.
 
-        private static void Menu()
+        private static void Menu(List<Student> students)
         {
             Console.WriteLine("1. Print all student grades.");
             Console.WriteLine("2. Add student grade.");
@@ -58,10 +59,10 @@ namespace GradeManager
             switch (choice)
             {
                 case 1:
-                    PrintStudentGrades(); // Call PrintStudentGrades method for 1st choice.
+                    PrintStudentGrades(students); // Call PrintStudentGrades method for 1st choice.
                     break; //Each case must end with break statement, otherwise all cases will execute.
                 case 2:
-                    AddStudentGrade();
+                    AddStudentGrade(students);
                     break;
                 case 3:
                     CalculateClassAverage();
@@ -86,14 +87,90 @@ namespace GradeManager
             }
         }
 
-        private static void PrintStudentGrades()
+        private static void PrintStudentGrades(List<Student> students)
         {
-            Console.WriteLine("PrintStudentGrades method is called.");
+            string header = "Student Name        Grade";
+            Console.WriteLine(header);
+            Console.WriteLine(new String('-', header.Length)); // Create a new string of dashes that is the length of the header
+
+            //Check if there are existing students, if so, print their grades. If not, say there are no students.
+
+            if (students != null && students.Count > 0) // Students list exists in memory AND contains students. || means "or". && means "and".
+            {
+                //Print the student grades
+                foreach (var student in students)
+                {
+                    var studentFirstName = student.getFirstName(); // Get first name
+                    var studentLastName = student.getLastName(); // Get last name
+                    var studentGradeList = student.GetGrades();  // Get the student grade list
+
+                    // Print the grades if they exist, if not, say no grades
+                    Console.WriteLine(string.Empty); // Line break
+
+                    if (studentGradeList != null && studentGradeList.Count > 0) // Student grade list exists in memory AND contains grades
+                    {
+                        foreach (var grade in studentGradeList)
+                        {
+                            Console.WriteLine($"{studentFirstName} {studentLastName}        {grade}");
+                        }
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($"{studentFirstName} {studentLastName}        No Grades");
+                    }
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("There are no students in the system.");
+            }
+            
+            
         }
 
-        private static void AddStudentGrade()
+        private static void AddStudentGrade(List<Student> students)
         {
-            Console.WriteLine("AddStudentGrade method is called.");
+            // Check for students to add grades for
+
+            if (students != null && students.Count > 0)
+            {
+                Console.WriteLine("\nWhich student do you want to add a grade for?\n\n"); // \n for line break
+                int studentListNumber = 1; // To list students. Start from 1 as list items for users typically start from 1 rather than 0.
+
+                foreach (var student in students)
+                {
+                    var studentFirstName = student.getFirstName();
+                    var studentLastName = student.getLastName();
+                    Console.WriteLine($"{studentListNumber}. {studentFirstName} {studentLastName}");
+                    studentListNumber++; // Increase list number by 1 for each student listed.
+                }
+
+                string studentChoiceInput = Console.ReadLine();
+                int studentChoice = int.Parse(studentChoiceInput);
+
+                // Add the grade for the student. Based on the student choice, we must select the right student in the Student List to add the grade for
+                // Since the list starts at 0, rather than 1, we must subtract 1 from the studentChoice so the right student is selected from the list.
+
+                studentChoice--; //Decrement by 1 for the Student List index number (position).
+
+                string studentFirstChoiceName = students[studentChoice].getFirstName(); //Access student from list. Format listVariableName[indexNumber]
+                string studentChoiceLastName = students[studentChoice].getLastName();
+
+                //Capture student grade from keyboard input and parse to int
+                Console.Write($"Enter grade for student {studentFirstChoiceName} {studentChoiceLastName}: ");
+                string gradeInput = Console.ReadLine();
+                int grade = int.Parse(gradeInput);
+
+                //Add the grade to the student grade list
+                students[studentChoice].AddGrade(grade); 
+            }
+
+            else
+            {
+                Console.WriteLine("There are no students in the system.");
+            }
         }
 
         private static void CalculateClassAverage()
