@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GradeManager
 {
@@ -39,14 +41,16 @@ namespace GradeManager
 
         private static void Menu(List<Student> students)
         {
-            Console.WriteLine("1. Print all student grades.");
-            Console.WriteLine("2. Add student grade.");
-            Console.WriteLine("3. Calculate Class Average");
-            Console.WriteLine("4. Print highest grade");
-            Console.WriteLine("5. Print lowest grade");
-            Console.WriteLine("6. Delete Student");
-            Console.WriteLine("7. Edit student grade");
-            Console.WriteLine("8. Exit");
+            Console.WriteLine("1. Save all students to file.");
+            Console.WriteLine("2. Load all students from file.");
+            Console.WriteLine("3. Print all student grades.");
+            Console.WriteLine("4. Add student grade.");
+            Console.WriteLine("5. Calculate Class Average");
+            Console.WriteLine("6. Print highest grade");
+            Console.WriteLine("7. Print lowest grade");
+            Console.WriteLine("8. Delete Student");
+            Console.WriteLine("9. Edit student grade");
+            Console.WriteLine("10. Exit");
             Console.WriteLine("\n"); //Line break
             Console.Write("Enter a choice (number): "); //See User Input code from Week 1
 
@@ -59,32 +63,57 @@ namespace GradeManager
             switch (choice)
             {
                 case 1:
-                    PrintStudentGrades(students); // Call PrintStudentGrades method for 1st choice.
-                    break; //Each case must end with break statement, otherwise all cases will execute.
+                    SaveStudents(students);
+                    break;
                 case 2:
-                    AddStudentGrade(students);
+                    students = LoadStudents(); //Loaded students from file will be returned via LoadStudents method and assigned to students variable.
                     break;
                 case 3:
-                    CalculateClassAverage();
-                    break;
+                    PrintStudentGrades(students); // Call PrintStudentGrades method for 1st choice.
+                    break; //Each case must end with break statement, otherwise all cases will execute.
                 case 4:
-                    PrintHighestGrade();
+                    AddStudentGrade(students);
                     break;
                 case 5:
-                    PrintLowestGrade();
+                    CalculateClassAverage(students);
                     break;
                 case 6:
-                    DeleteStudent();
+                    PrintHighestGrade();
                     break;
                 case 7:
-                    EditStudentGrade();
+                    PrintLowestGrade();
                     break;
                 case 8:
+                    DeleteStudent();
+                    break;
+                case 9:
+                    EditStudentGrade();
+                    break;
+                case 10:
                     Exit();
                     break;
                 default: //Execute default case, if choice does not match any of the cases. We add no code and just put break statement which will end the switch block.
                     break;
             }
+        }
+
+        private static void SaveStudents(List<Student> students)
+        {
+            // Serialize the students List object to a string using Newtonsoft.Json. The resulting string will be JSON Text.
+            var studentsJson = JsonConvert.SerializeObject(students, Formatting.Indented);
+
+            //Write the JSON string to a file
+            var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; //Double \\ to escape \ for character in string
+            File.WriteAllText(path, studentsJson);
+        }
+
+        private static List<Student> LoadStudents()
+        {
+            List<Student> students = null; // Create empty student list to load from file
+            var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; // File path
+            var json = File.ReadAllText(path); // Load JSON text from file
+            students = JsonConvert.DeserializeObject<List<Student>>(json); // Convert JSON text back to object
+            return students; // Sent student list back out to main application.
         }
 
         private static void PrintStudentGrades(List<Student> students)
@@ -100,9 +129,7 @@ namespace GradeManager
                 //Print the student grades
                 foreach (var student in students)
                 {
-                    var studentFirstName = student.getFirstName(); // Get first name
-                    var studentLastName = student.getLastName(); // Get last name
-                    var studentGradeList = student.GetGrades();  // Get the student grade list
+                    var studentGradeList = student.Grades;  // Get the student grade list
 
                     // Print the grades if they exist, if not, say no grades
                     Console.WriteLine(string.Empty); // Line break
@@ -111,13 +138,13 @@ namespace GradeManager
                     {
                         foreach (var grade in studentGradeList)
                         {
-                            Console.WriteLine($"{studentFirstName} {studentLastName}        {grade}");
+                            Console.WriteLine($"{student.FirstName} {student.LastName}        {grade}");
                         }
                     }
 
                     else
                     {
-                        Console.WriteLine($"{studentFirstName} {studentLastName}        No Grades");
+                        Console.WriteLine($"{student.FirstName} {student.LastName}        No Grades");
                     }
                 }
             }
@@ -141,9 +168,7 @@ namespace GradeManager
 
                 foreach (var student in students)
                 {
-                    var studentFirstName = student.getFirstName();
-                    var studentLastName = student.getLastName();
-                    Console.WriteLine($"{studentListNumber}. {studentFirstName} {studentLastName}");
+                    Console.WriteLine($"{studentListNumber}. {student.FirstName} {student.LastName}");
                     studentListNumber++; // Increase list number by 1 for each student listed.
                 }
 
@@ -155,8 +180,8 @@ namespace GradeManager
 
                 studentChoice--; //Decrement by 1 for the Student List index number (position).
 
-                string studentFirstChoiceName = students[studentChoice].getFirstName(); //Access student from list. Format listVariableName[indexNumber]
-                string studentChoiceLastName = students[studentChoice].getLastName();
+                string studentFirstChoiceName = students[studentChoice].FirstName; //Access student from list. Format listVariableName[indexNumber]
+                string studentChoiceLastName = students[studentChoice].LastName;
 
                 //Capture student grade from keyboard input and parse to int
                 Console.Write($"Enter grade for student {studentFirstChoiceName} {studentChoiceLastName}: ");
@@ -164,7 +189,7 @@ namespace GradeManager
                 int grade = int.Parse(gradeInput);
 
                 //Add the grade to the student grade list
-                students[studentChoice].AddGrade(grade); 
+                students[studentChoice].Grades.Add(grade); 
             }
 
             else
@@ -173,9 +198,41 @@ namespace GradeManager
             }
         }
 
-        private static void CalculateClassAverage()
+        private static void CalculateClassAverage(List<Student> students)
         {
-            Console.WriteLine("CalculateClassAverage method is called.");
+            // Take each student grade and average them all out.
+
+            // For each student, we want to add all the grades to one value and keep track of the total grade count
+            // as well as the sum, as the class average would be total grade count / sum.
+
+            double average = 0;
+            int gradeSum = 0;
+            int gradeCount = 0;
+
+            // Loop through all the students
+            foreach (var student in students)
+            {
+                //Compute individual averages to save to file. Since individual grades will be saved to file,
+                // Class average can be computed when loading from file.
+
+                student.ComputeAverage(); // Compute the individual average for each student
+
+                // For each student, get each grade, add it to the gradeSum, and increment the gradeCount each time.
+
+                foreach (var grade in student.Grades)
+                {
+                    gradeSum += grade; // Adding the grade to the gradeSum
+                    gradeCount++; // Increasing the grade count by 1.
+                }
+            }
+
+            // When student completes, compute the average
+
+            average = gradeSum / gradeCount;
+
+            // Print the class average
+
+            Console.WriteLine($"The class average is {average}.");
         }
 
         private static void PrintHighestGrade()
