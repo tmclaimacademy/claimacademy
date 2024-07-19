@@ -13,6 +13,7 @@ namespace GradeManager
     {
         private static readonly string applicationName = "Grade Manager"; //Declare application name as a string, make global and readonly as this value will not change.
         private static bool exit = false; // Create a boolean (true or false value, see Week 1 code under Booleans) called "exit", set to false by default as we want application to continue to run until we want to exit
+        private static List<Student> students;
         public static void Main(string[] args)
         { 
 
@@ -21,7 +22,7 @@ namespace GradeManager
             Console.WriteLine('\n'); // Create 2 blank lines to start menu. WriteLine method call does first blank line, extra '\n' (newline character) creates second blank line (like hitting Enter twice on a keyboard).
 
             // Create some students
-            var students = new List<Student>()
+            students = new List<Student>()
             {
                 new Student("Tavish", "Misra"), // Student 0 (student number is index (position) number in the List)
                 new Student("Jibreel", "Muhammad"), //Student 1
@@ -33,13 +34,13 @@ namespace GradeManager
 
             while(!exit) // Keep menu running after each choice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
             {
-                Menu(students);
+                Menu();
             }
         }
 
         // Methods for features. We can make these private rather than public because we are not calling these methods outside of this class.
 
-        private static void Menu(List<Student> students)
+        private static void Menu()
         {
             Console.WriteLine("1. Save all students to file.");
             Console.WriteLine("2. Load all students from file.");
@@ -63,19 +64,19 @@ namespace GradeManager
             switch (choice)
             {
                 case 1:
-                    SaveStudents(students);
+                    SaveStudents();
                     break;
                 case 2:
-                    students = LoadStudents(); //Loaded students from file will be returned via LoadStudents method and assigned to students variable.
+                    LoadStudents(); //Loaded students from file will be returned via LoadStudents method and assigned to students variable.
                     break;
                 case 3:
-                    PrintStudentGrades(students); // Call PrintStudentGrades method for 1st choice.
+                    PrintStudentGrades(); // Call PrintStudentGrades method for 1st choice.
                     break; //Each case must end with break statement, otherwise all cases will execute.
                 case 4:
-                    AddStudentGrade(students);
+                    AddStudentGrade();
                     break;
                 case 5:
-                    CalculateClassAverage(students);
+                    CalculateClassAverage();
                     break;
                 case 6:
                     PrintHighestGrade();
@@ -97,7 +98,7 @@ namespace GradeManager
             }
         }
 
-        private static void SaveStudents(List<Student> students)
+        private static void SaveStudents()
         {
             // Serialize the students List object to a string using Newtonsoft.Json. The resulting string will be JSON Text.
             var studentsJson = JsonConvert.SerializeObject(students, Formatting.Indented);
@@ -105,18 +106,18 @@ namespace GradeManager
             //Write the JSON string to a file
             var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; //Double \\ to escape \ for character in string
             File.WriteAllText(path, studentsJson);
+            Console.WriteLine($"\nStudents saved to {path}.");
         }
 
-        private static List<Student> LoadStudents()
+        private static void LoadStudents()
         {
-            List<Student> students = null; // Create empty student list to load from file
             var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; // File path
             var json = File.ReadAllText(path); // Load JSON text from file
             students = JsonConvert.DeserializeObject<List<Student>>(json); // Convert JSON text back to object
-            return students; // Sent student list back out to main application.
+            Console.WriteLine($"\nStudents loaded successfully from file {path}.");
         }
 
-        private static void PrintStudentGrades(List<Student> students)
+        private static void PrintStudentGrades()
         {
             string header = "Student Name        Grade";
             Console.WriteLine(header);
@@ -157,7 +158,7 @@ namespace GradeManager
             
         }
 
-        private static void AddStudentGrade(List<Student> students)
+        private static void AddStudentGrade()
         {
             // Check for students to add grades for
 
@@ -198,7 +199,7 @@ namespace GradeManager
             }
         }
 
-        private static void CalculateClassAverage(List<Student> students)
+        private static void CalculateClassAverage()
         {
             // Take each student grade and average them all out.
 
@@ -232,22 +233,75 @@ namespace GradeManager
 
             // Print the class average
 
-            Console.WriteLine($"The class average is {average}.");
+            Console.WriteLine($"\nThe class average is {average}.");
         }
 
         private static void PrintHighestGrade()
         {
-            Console.WriteLine("PrintHighestGrade method is called.");
+            int maxGrade = 0; //Create a variable called maxGrade to hold the current maxGrade as we loop through all the grades.
+            int count = 0; //Master grade count. If 0, then we are starting from the beginning.
+            foreach (var student in students)
+            {
+                foreach (var grade in student.Grades)
+                {
+                    if (count == 0 || grade > maxGrade) // If we are starting OR the next grade is greater than maxGrade, then assign the new highest grade to maxGrade.
+                    {
+                        maxGrade = grade;
+                    }
+
+                    count++; // Increment count outside of if because we want to increment this regardless of the case.
+                }
+            }
+
+            Console.WriteLine($"\nThe highest grade is {maxGrade}\n.");
         }
 
         private static void PrintLowestGrade()
         {
-            Console.WriteLine("PrintLowestGrade method is called.");
+            int minGrade = 0; //Create a variable called minGrade to hold the current minGrade as we loop through all the grades.
+            int count = 0; //Master grade count. If 0, then we are starting from the beginning.
+            foreach (var student in students)
+            {
+                foreach (var grade in student.Grades)
+                {
+                    if (count == 0 || grade < minGrade) // If we are starting OR the next grade is lesser than minGrade, then assign the new lowest grade to minGrade.
+                    {
+                        minGrade = grade;
+                    }
+
+                    count++; // Increment count outside of if because we want to increment this regardless of the case.
+                }
+            }
+
+            Console.WriteLine($"\nThe lowest grade is {minGrade}\n.");
         }
 
         private static void DeleteStudent()
         {
-            Console.WriteLine("DeleteStudent method is called.");
+            Console.WriteLine("Which student do you want to delete?\n");
+            int studentNumber = 1; // Start from 1 for the menu.
+
+            foreach (var student in students)
+            {
+                Console.WriteLine($"{studentNumber}. {student.FirstName} {student.LastName}");
+                studentNumber++; // Increase the student number for each student name printed.
+            }
+
+            string choiceInput; // Storing input for the choice
+            choiceInput = Console.ReadLine(); // Take choice input from keyboard
+            int choice = int.Parse(choiceInput); // Convert string choice to int.
+
+            choice--; // Decrease choice by 1 to map with List numbers starting from 0.
+
+            var studentChoice = students[choice]; // Store the chosen student in a Student variable.
+            var studentName = $"{studentChoice.FirstName} {studentChoice.LastName}";
+            // Store student name in variable for confirmation message when deleted. Once student is deleted, we can no longer access the name.
+
+            // Delete the student, use RemoveAt method because we want to use the choice to remove the specific student.
+            // RemoveAt uses the integer representing the position in the list, and removes the student at that position.
+            students.RemoveAt(choice);
+
+            Console.WriteLine($"Student {studentName} Deleted");
         }
 
         private static void EditStudentGrade()
