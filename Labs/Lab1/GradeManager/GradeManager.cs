@@ -32,7 +32,7 @@ namespace GradeManager
             }; // Create a List of students and instantiate (create) the students from the start.
                // We call the new keyword on each Student object in the List because each Student object must be created.
 
-            while(!exit) // Keep menu running after each choice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
+            while(!exit) // Keep menu running after each studentChoice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
             {
                 Menu();
             }
@@ -53,7 +53,7 @@ namespace GradeManager
             Console.WriteLine("9. Edit student grade");
             Console.WriteLine("10. Exit");
             Console.WriteLine("\n"); //Line break
-            Console.Write("Enter a choice (number): "); //See User Input code from Week 1
+            Console.Write("Enter a studentChoice (number): "); //See User Input code from Week 1
 
             string choiceInput = Console.ReadLine(); //Keyboard input is always a string
             int choice = int.Parse(choiceInput); //We use int's (Integer) Parse method to convert the string into an integer. If you don't enter an integer, program will crash without exception handling which we will cover later.
@@ -70,7 +70,7 @@ namespace GradeManager
                     LoadStudents(); //Loaded students from file will be returned via LoadStudents method and assigned to students variable.
                     break;
                 case 3:
-                    PrintStudentGrades(); // Call PrintStudentGrades method for 1st choice.
+                    PrintStudentGrades(); // Call PrintStudentGrades method for 1st studentChoice.
                     break; //Each case must end with break statement, otherwise all cases will execute.
                 case 4:
                     AddStudentGrade();
@@ -93,7 +93,7 @@ namespace GradeManager
                 case 10:
                     Exit();
                     break;
-                default: //Execute default case, if choice does not match any of the cases. We add no code and just put break statement which will end the switch block.
+                default: //Execute default case, if studentChoice does not match any of the cases. We add no code and just put break statement which will end the switch block.
                     break;
             }
         }
@@ -176,8 +176,8 @@ namespace GradeManager
                 string studentChoiceInput = Console.ReadLine();
                 int studentChoice = int.Parse(studentChoiceInput);
 
-                // Add the grade for the student. Based on the student choice, we must select the right student in the Student List to add the grade for
-                // Since the list starts at 0, rather than 1, we must subtract 1 from the studentChoice so the right student is selected from the list.
+                // Add the grade for the student. Based on the student studentChoice, we must select the right student in the Student List to add the grade for
+                // Since the list starts at 0, rather than 1, we must subtract 1 from the studentChoiceObject so the right student is selected from the list.
 
                 studentChoice--; //Decrement by 1 for the Student List index number (position).
 
@@ -287,17 +287,17 @@ namespace GradeManager
                 studentNumber++; // Increase the student number for each student name printed.
             }
 
-            string choiceInput; // Storing input for the choice
-            choiceInput = Console.ReadLine(); // Take choice input from keyboard
-            int choice = int.Parse(choiceInput); // Convert string choice to int.
+            string choiceInput; // Storing input for the studentChoice
+            choiceInput = Console.ReadLine(); // Take studentChoice input from keyboard
+            int choice = int.Parse(choiceInput); // Convert string studentChoice to int.
 
-            choice--; // Decrease choice by 1 to map with List numbers starting from 0.
+            choice--; // Decrease studentChoice by 1 to map with List numbers starting from 0.
 
             var studentChoice = students[choice]; // Store the chosen student in a Student variable.
             var studentName = $"{studentChoice.FirstName} {studentChoice.LastName}";
             // Store student name in variable for confirmation message when deleted. Once student is deleted, we can no longer access the name.
 
-            // Delete the student, use RemoveAt method because we want to use the choice to remove the specific student.
+            // Delete the student, use RemoveAt method because we want to use the studentChoice to remove the specific student.
             // RemoveAt uses the integer representing the position in the list, and removes the student at that position.
             students.RemoveAt(choice);
 
@@ -306,7 +306,56 @@ namespace GradeManager
 
         private static void EditStudentGrade()
         {
-            Console.WriteLine("EditStudentGrade method is called.");
+            // Get the student for which we are editing a grade for.
+            Console.WriteLine("Which student do you want to edit a grade for? ");
+
+            // Start student numbers at 1 for menu.
+            int studentNumber = 1;
+
+            // Loop through students to list students
+            foreach (var student in students)
+            {
+                Console.WriteLine($"{studentNumber}. {student.FirstName} {student.LastName}");
+                studentNumber++;
+            }
+
+            // Take the numeric input for the studentChoice, convert to integer, and decrement to map to List positions.
+            string studentChoiceInput = Console.ReadLine();
+            int studentChoice = int.Parse(studentChoiceInput);
+            studentChoice--;
+
+            // Assign the student studentChoice to its own variable
+            var studentChoiceObject = students[studentChoice];
+
+            // Pick the grade to be changed
+            Console.WriteLine($"Which grade for student {studentChoiceObject.FirstName} {studentChoiceObject.LastName} do you want to edit?");
+
+            // Start from 1 for menu
+            int gradeOption = 1;
+
+            //Loop through listing the grades
+            foreach (var grade in studentChoiceObject.Grades)
+            {
+                Console.WriteLine($"{gradeOption}. {grade}");
+                gradeOption++;
+            }
+
+            // Pick the grade to change
+            string gradeChoiceInput = Console.ReadLine();
+            int gradeChoice = int.Parse(gradeChoiceInput);
+            gradeChoice--;
+
+            // Enter the new grade, convert to integer, save to newGrade variable
+            Console.WriteLine("Enter the new grade.");
+            string newGradeInput = Console.ReadLine();
+            int newGrade = int.Parse(newGradeInput);
+
+            // Update the grade in the list
+            studentChoiceObject.Grades[gradeChoice] = newGrade;
+
+            // Update the Student object in student list with new grade
+            students[studentChoice] = studentChoiceObject;
+
         }
 
         private static void Exit()
