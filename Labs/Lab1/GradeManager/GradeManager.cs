@@ -53,7 +53,7 @@ namespace GradeManager
             Console.WriteLine("9. Edit student grade");
             Console.WriteLine("10. Exit");
             Console.WriteLine("\n"); //Line break
-            Console.Write("Enter a studentChoice (number): "); //See User Input code from Week 1
+            Console.Write("Enter a menu option (number): "); //See User Input code from Week 1
 
             string choiceInput = Console.ReadLine(); //Keyboard input is always a string
             int choice = int.Parse(choiceInput); //We use int's (Integer) Parse method to convert the string into an integer. If you don't enter an integer, program will crash without exception handling which we will cover later.
