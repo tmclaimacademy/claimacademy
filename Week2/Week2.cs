@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Week2
 {
-    internal class Program
+    public class Week2
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
         }
     }
