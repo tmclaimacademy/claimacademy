@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -113,13 +114,68 @@ namespace Week2
 
             // Tuples - Tuples are groups of 2 or 3 data values that you can put in a variable
 
-            Tuple<int, string> t1 = new Tuple<int, string>(1, "Tavish");
+            //Tuple<int, string> t1 = new Tuple<int, string>(1, "Tavish");
 
-            Console.WriteLine($"ID is {t1.Item1} and Name is {t1.Item2}");
+            //Console.WriteLine($"ID is {t1.Item1} and Name is {t1.Item2}");
 
+            // Declare multiple ints
+
+            //int a, b, c, d, e, f; // 6 ints
+                                  // This is the same as
+                                  // int a; // Declaration
+                                  // int b;
+                                  // int c;
+                                  // int d;
+                                  // int e;
+                                  // int f;
+                                  // You can assign all these on one statement, but can only assign a single value on one statement.
+
+           // a = b = c = d = e = f = 1; // All 6 int variables are now equal to 1.
+                                       // This is the same as
+                                       // int a = 1; //Assignment
+                                       // int b = 1;
+                                       // int c = 1;
+                                       // int d = 1;
+                                       // int e = 1;
+                                       // int f = 1;
+                                       // However, if the 6 ints need to be separate values, then this must be done on separate statements.
+            int g = 1;
+            int h = 2;
+            int i = 3;
+            int j = 4;
+            int k = 5;
+            int l = 6;
+
+            // Operators
+            // Addition
+            double a = 7;
+            double b = 1.5;
+            double c = a + b; // We are adding the 7 in a with the 1.5 in b --> 7 + 1.5 = 8.5, and then the 8.5 is assigned to c, which is also already declared in the statement.
+
+            a += 2.5; // This is the same as doing a = a + 2.5. We are adding 2.5 to the value currently in a, which is 7 --> 7 + 2.5 = 9.5.
+                      // We then replace the value of 7 in a with the new 9.5 value we got from adding, and replace it by assigning it to a.
+                      // Subtraction
+                      // a and b are already declared above, but we will reset them to 7 and 1.5 by assigning these back to a and b.
+            a = 7;
+            b = 1.5;
+
+            // c is also declared above so we will just do the subtraction without declaring c again.
             
+            c = a - b; // We are subtracting b (1.5) from a (7) --> 7 - 1.5 = 5.5. 5.5 is then being assigned to c.
 
-            
+            a -= 2.5; // This is the same as a = a - 2.5. We are subtracting 2.5 from a (7) --> 7 - 2.5 = 4.5.
+                      // 4.5 is then replacing the old value of 7 in a by assignment (a = 4.5)
+
+            // Multiplication
+
+            // We are changing the values of a and b to 7 and 3 respectively
+            a = 7;
+            b = 3;
+
+            c = a * b; // We are multiplying a (7) by b (3) --> 7 * 3 = 21
+                       // 21 is the being assigned back to c (c = 21)
+            a *= 3; // This is the same as a = a * 3. We are multiplying a (7) times 3 --> 7 * 3 = 21
+                   // We are then replacing the old value of a (7) by assigning the new computed value of 21 back to a (a = 21)
 
 
             Console.Read(); // Leave Console window open until key press
