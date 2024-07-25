@@ -18,7 +18,7 @@ namespace Week2
 
             // Create a StringBuilder
             //Console.WriteLine("Creating StringBuilder");
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
 
             //sb.Append("Hello World "); // Appends a string without a new line character
             //sb.AppendLine("Hello World with new line character."); // Appends a string with a new line, i.e. typing something and pressing Enter for the next line.
@@ -175,7 +175,88 @@ namespace Week2
             c = a * b; // We are multiplying a (7) by b (3) --> 7 * 3 = 21
                        // 21 is the being assigned back to c (c = 21)
             a *= 3; // This is the same as a = a * 3. We are multiplying a (7) times 3 --> 7 * 3 = 21
-                   // We are then replacing the old value of a (7) by assigning the new computed value of 21 back to a (a = 21)
+                    // We are then replacing the old value of a (7) by assigning the new computed value of 21 back to a (a = 21)
+
+            // Division
+
+            // We will assign the values of a and b to 7 and 2 respectively
+
+            a = 7;
+            b = 2;
+            c = a / b; // We will then divide a and b and assign the result to c. 7/2 = 3
+                       // Since a and b are both ints, c will also be an int and so will be a whole number
+                       // 7 / 2 is supposed to be 3.5, but it does not round up to 4. The int is whatever
+                       // the whole number portion of the result would be, in this case with 3.5, it will
+                       // be 3.
+                       // To get the appropriate result of 3.5 when dividing 7 by 2, one or both of a or b must be a double.
+                       // i.e. int a = 7; double b = 2; OR double a = 7; int b = 2 OR double a = 7; double b = 2;
+                       // Modulus
+                       // The Modulus operator (%) will give the remainder of a division operation
+                       // i.e. 7 % 2 = 1 because dividing 7 by 2, we would have 3 remainder 1. (long division)
+            /*
+                 3
+             2 |---
+               | 7
+               |-6
+               ---
+                1 <-- result of modulus operation of 7 and 2 (7 % 2 == 1)
+
+
+             */
+
+            // Modulus demonstration
+
+            // We can use modulus to determinine even or odd numbers
+            // If a number is even, it has a modulus of 0 because dividing an even number by 2 always results in a remainder of 0.
+            // If a number is odd, it has a modulus of 1 because dividing an odd number by 2 will always results in a remainder of 1.
+
+            //bool isEven = false;
+            //bool isOdd = false; // Set isEven and isOdd to false by default because modulus should prove a number to be odd or even.
+            // Proving the odd or even with the modulus check would then make it true.
+            //int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            //foreach (int number in numbers)
+            //{
+            //    if (number % 2 == 0) // If the number divided by 2 results in remainder 0, the number is even
+            //    {
+            //        Console.WriteLine($"The number {number} is even.");
+            //    }
+
+            //    else // If the number divided by 2 is not 0, it is odd. The modulus of a number and 2 can only be 0 or 1.
+            //    {
+            //        Console.WriteLine($"The number {number} is odd");
+            //    }
+            //}
+
+            // Increment operator
+
+            // ++ as a suffix means the number is incremented after the operation on that line
+
+            a = 5;
+
+            Console.WriteLine($"Suffix a: {a} and b: {a++} "); //On suffix, a and b are both 5 here because in b, a is being printed before it is incremented
+            
+            a = 5; //Reset a to 5 for prefix demo
+
+            Console.WriteLine($"Prefix a: {a} and b: {++a} "); //On prefix, a will be 5 and b will be 6 because with the ++ before the a, it will increment first and print second.
+
+            //Type casting
+
+            // Explicit cast
+            int t = 32;
+            long v = t;
+
+            // Implicit cast
+            long x = 32;
+            int y;
+            y = (int)x;
+
+
+
+
+
+
+
 
 
             Console.Read(); // Leave Console window open until key press
