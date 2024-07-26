@@ -18,14 +18,25 @@ namespace Week2
 
             // Create a StringBuilder
             //Console.WriteLine("Creating StringBuilder");
-            //StringBuilder sb = new StringBuilder();
+            StringBuilder crew = new StringBuilder("Straw", 50); //Start a StringBuilder with string "Straw" and a starting capacity
+                                                               //of 50 characters.
+            crew.Append(new char[] { 'h', 'a', 't' }); //Example 1
+            //crew.Append("hat"); //Example 2
+            //Example 1 and 2 are two ways to do the same thing, as a char array is the same as a string.
+            crew.AppendFormat("hat {0}", "Crew"); //Appends by argument. "Crew" is appended to "hat ".
+            Console.WriteLine("There are {0} chars in {1}", crew.Length, crew.ToString()); //Another way to do string interpolation, by parameter.
+            crew.Insert(0, "The"); // Inserts string "The" at the beginning of the string (position 0).
+            crew.Replace("The", "Yonko Empire"); //Replaces each instances of the string "The" with the string "Yonko Empire")
+            Console.WriteLine("The string is now {0} characters and is currently \"{1}\"", crew.Length, crew.ToString());
 
-            //sb.Append("Hello World "); // Appends a string without a new line character
-            //sb.AppendLine("Hello World with new line character."); // Appends a string with a new line, i.e. typing something and pressing Enter for the next line.
-            //sb.Append("New line starts here");
+
+
+            //crew.Append("Hello World "); // Appends a string without a new line character
+            //crew.AppendLine("Hello World with new line character."); // Appends a string with a new line, i.e. typing something and pressing Enter for the next line.
+            //crew.Append("New line starts here");
             //// To convert the StringBuilder object (which is just a memory object to hold the string) to an actual String, we call the ToString method.
 
-            //string sbText = sb.ToString();
+            //string sbText = crew.ToString();
 
             //// Every object in C# has a ToString method, because the parent class of every C# class is Object. And Object as a ToString method.
 
@@ -47,11 +58,11 @@ namespace Week2
             //for (int i = 0; i < 10000; i++)
             //{
             //    var code = random.Next(1000, 9999); // Create a new random 4-digit number
-            //    sb.AppendLine($"Patient number {i}: FirstName-{i}\tLastName-{i}\tMedical Code: {code}");
+            //    crew.AppendLine($"Patient number {i}: FirstName-{i}\tLastName-{i}\tMedical Code: {code}");
             //}
 
             //Console.WriteLine("Save Medical Records");
-            //var contents = sb.ToString(); //Turn our 10000 records into a string
+            //var contents = crew.ToString(); //Turn our 10000 records into a string
             //File.WriteAllText("C:\\Users\\Tavish\\Documents\\medicalrecords.txt", contents); // Write contents to the file path
             //Console.WriteLine("Done!");
 
