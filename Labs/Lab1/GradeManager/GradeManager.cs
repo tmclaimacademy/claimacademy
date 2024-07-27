@@ -13,29 +13,111 @@ namespace GradeManager
     {
         private static readonly string applicationName = "Grade Manager"; //Declare application name as a string, make global and readonly as this value will not change.
         private static bool exit = false; // Create a boolean (true or false value, see Week 1 code under Booleans) called "exit", set to false by default as we want application to continue to run until we want to exit
+        private static bool studentsSaved = false; // Add a save students check
         private static List<Student> students;
+        private static StringBuilder log;
+        private static string logFilePath;
+        private const string studentsJsonPath = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json";
         public static void Main(string[] args)
-        { 
-
-            Console.WriteLine(applicationName); //Print application name on first line
-            Console.WriteLine(new String('-', applicationName.Length)); //Print line on name equal to length of application name. This is a dynamically-built string. We are creating a String object, calling the String class constructor with the new keyword. It is accepting two parameters, the first is a character to print, the second is an integer representing the count of characters to build the string. The Length property on the applicationName string gives us the integer count of applicationName so the count of dashes matches the length of the title.
-            Console.WriteLine('\n'); // Create 2 blank lines to start menu. WriteLine method call does first blank line, extra '\n' (newline character) creates second blank line (like hitting Enter twice on a keyboard).
-
-            // Create some students
-            students = new List<Student>()
+        {
+            try
             {
-                new Student("Tavish", "Misra"), // Student 0 (student number is index (position) number in the List)
-                new Student("Jibreel", "Muhammad"), //Student 1
-                new Student("Hassan", "Fofana"),  // Student 2
-                new Student("Jarvis", "Potter"), // Student 3
-                new Student("Greg", "Leeker") // Student 4
-            }; // Create a List of students and instantiate (create) the students from the start.
-               // We call the new keyword on each Student object in the List because each Student object must be created.
+                //Initiate application logging
 
-            while(!exit) // Keep menu running after each studentChoice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
-            {
-                Menu();
+                //Initialize our StringBuilder. We have already declared a global StringBuilder object called "log"
+                //So we will initialize by creating the StringBuilder object with the declaration.
+
+                log = new StringBuilder();
+
+                //We will need a file path to log the file too. The file contents will be saved when we exit or when an exception is thrown.
+                logFilePath = "C:\\Users\\Tavish\\Documents\\grademanagerlog.txt";
+
+                //To add logs to our StringBuilder, which will be saved to our logfile later,
+                //We will call log.Append("log message") for building out a single-line log message
+                //or we will call log.AppendLine("log message") for line-by-line logging. This will be what we will call most of the time.
+                //For timestamps, we will interpolate DateTime.Now for each log message
+
+                log.AppendLine($"{DateTime.Now} - Starting GradeManager application.");
+                Console.WriteLine(applicationName); //Print application name on first line
+                Console.WriteLine(new String('-', applicationName.Length)); //Print line on name equal to length of application name. This is a dynamically-built string. We are creating a String object, calling the String class constructor with the new keyword. It is accepting two parameters, the first is a character to print, the second is an integer representing the count of characters to build the string. The Length property on the applicationName string gives us the integer count of applicationName so the count of dashes matches the length of the title.
+                Console.WriteLine('\n'); // Create 2 blank lines to start menu. WriteLine method call does first blank line, extra '\n' (newline character) creates second blank line (like hitting Enter twice on a keyboard).
+
+                // Check for students to load
+                if (File.Exists(studentsJsonPath)) // Check if the student json exists
+                {
+                    log.AppendLine($"{DateTime.Now} - Loading file {studentsJsonPath} to check for students.");
+                    var studentsJsonFile = File.Open(studentsJsonPath, FileMode.Open); // Open the file in memory if it exists in the specified file path.
+                    log.AppendLine($"{DateTime.Now} - File {studentsJsonPath} is {studentsJsonFile.Length} bytes in size.");
+
+                    if (studentsJsonFile.Length > 0 ) // Check if the file contains data (greater than 0 bytes in size), if it does, ask to load the file. 
+                    {
+                        Console.Write("Do you want to load the existing saved Students file? (Y/N)");
+                        string choice = Console.ReadLine().Trim(); // ReadLine reads input, the additional Trim call eliminates any whitespace from the input.
+
+                        if (choice.ToUpper() == "Y") // ToUpper method changes any y or Y to Y.
+                        {
+                            log.AppendLine($"{DateTime.Now} - Closing file {studentsJsonPath} after student checking");
+                            studentsJsonFile.Close(); // Close the file so NewtonSoft.Json can read the JSON in LoadStudents
+                            log.AppendLine($"{DateTime.Now} - Loading student JSON data.");
+                            LoadStudents(); // Call Load Students
+                        }
+                        // No else as there is no other alternative, so merely continue 
+                        // If you enter anything other than y or Y, it will skip
+                    }
+
+                    
+
+                }
+
+                // If no students loaded from file, create new students
+                if (students == null || students.Count == 0) 
+                {
+                    log.AppendLine($"{DateTime.Now} - Creating students...");
+
+                    students = new List<Student>()
+                    {
+                        new Student("Tavish", "Misra"), // Student 0 (student number is index (position) number in the List)
+                        new Student("Jibreel", "Muhammad"), //Student 1
+                        new Student("Hassan", "Fofana"),  // Student 2
+                        new Student("Jarvis", "Potter"), // Student 3
+                        new Student("Greg", "Leeker") // Student 4
+                    }; // Create a List of students and instantiate (create) the students from the start.
+                       // We call the new keyword on each Student object in the List because each Student object must be created.
+
+
+                    //Log created students after students list creation with names and timestamps
+
+                    foreach (var student in students)
+                    {
+                        log.AppendLine($"{DateTime.Now} - Student {student.FirstName} {student.LastName} created.");
+                    }
+                }
+
+
+
+
+                while (!exit) // Keep menu running after each studentChoice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
+                {
+                    log.AppendLine($"{DateTime.Now} - Main Menu invoked.");
+                    Menu();
+                }
+
+                // On application exit, write terminate message to logs, write log file, and end.
+                log.AppendLine($"{DateTime.Now} - User Application Exit. Goodbye.");
+                File.AppendAllText(logFilePath, log.ToString()); //AppendAllText rather than WriteAllText to avoid overwriting the log file each time GradeManager is run
+                Console.WriteLine($"Log file written to {logFilePath}");
             }
+
+            catch (Exception ex)
+            {
+                log.AppendLine($"{DateTime.Now} - Error: {ex.Message}");
+
+                // Write the log file
+                File.AppendAllText(logFilePath, log.ToString());
+                Console.WriteLine($"Log file written to {logFilePath}");
+                return; // Exit the application on any uncaught downstream Exception
+            }
+            
         }
 
         // Methods for features. We can make these private rather than public because we are not calling these methods outside of this class.
@@ -106,8 +188,9 @@ namespace GradeManager
                         break;
                 }
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
+                log.AppendLine($"{DateTime.Now} - Exception Thrown - {ex.Message}");
                 Console.WriteLine("\nInvalid input, try again.\n");
             }
             
@@ -121,7 +204,7 @@ namespace GradeManager
 
             //Write the JSON string to a file
             var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; //Double \\ to escape \ for character in string
-            File.WriteAllText(path, studentsJson);
+            File.AppendAllText(path, studentsJson);
             Console.WriteLine($"\nStudents saved to {path}.\n");
         }
 
@@ -135,6 +218,7 @@ namespace GradeManager
 
         private static void PrintStudentGrades()
         {
+            log.AppendLine($"{DateTime.Now} - PrintStudentGrades called.");
             string header = "Student Name        Grade";
             Console.WriteLine(header);
             Console.WriteLine(new String('-', header.Length) + '\n'); // Create a new string of dashes that is the length of the header
@@ -147,6 +231,13 @@ namespace GradeManager
                 foreach (var student in students)
                 {
                     var studentGradeList = student.Grades;  // Get the student grade list
+
+                    // Log the grade count for the student if they have grades
+                    if (studentGradeList.Count > 0)
+                    {
+                        log.AppendLine($"{DateTime.Now} - {studentGradeList.Count} grades found for student {student.FirstName} {student.LastName}");
+                    }
+                    
 
                     // Print the grades if they exist, if not, say no grades
 
@@ -162,6 +253,7 @@ namespace GradeManager
 
                     else
                     {
+                        log.AppendLine($"{DateTime.Now} - No grades found for student {student.FirstName} {student.LastName}.");
                         Console.WriteLine($"{student.FirstName} {student.LastName}        No Grades");
                     }
 
@@ -173,7 +265,10 @@ namespace GradeManager
 
             else
             {
-                Console.WriteLine("\nThere are no students in the system.\n");
+                // Log and print the no students message
+                var noStudentsMessage = "\nThere are no students in the system.\n";
+                log.AppendLine($"{DateTime.Now} - {noStudentsMessage}");
+                Console.WriteLine(noStudentsMessage);
             }
             
             
@@ -181,6 +276,8 @@ namespace GradeManager
 
         private static void AddStudentGrade()
         {
+            log.AppendFormat("{0} - AddStudentGrade called\n", DateTime.Now); //Add timestamp to log by parameter, may be more readable in certain circumstances.
+
             // Check for students to add grades for
 
             if (students != null && students.Count > 0)
@@ -196,27 +293,34 @@ namespace GradeManager
 
                 string studentChoiceInput = Console.ReadLine();
                 int studentChoice = int.Parse(studentChoiceInput);
+                
 
                 // Add the grade for the student. Based on the student studentChoice, we must select the right student in the Student List to add the grade for
                 // Since the list starts at 0, rather than 1, we must subtract 1 from the studentChoiceObject so the right student is selected from the list.
 
                 studentChoice--; //Decrement by 1 for the Student List index number (position).
 
-                string studentFirstChoiceName = students[studentChoice].FirstName; //Access student from list. Format listVariableName[indexNumber]
+                string studentChoiceFirstName = students[studentChoice].FirstName; //Access student from list. Format listVariableName[indexNumber]
                 string studentChoiceLastName = students[studentChoice].LastName;
 
+                // Log the selected student
+                log.AppendLine($"{DateTime.Now} - Student {studentChoiceFirstName} {studentChoiceLastName} selected to add grade for.");
+
                 //Capture student grade from keyboard input and parse to int
-                Console.Write($"Enter grade for student {studentFirstChoiceName} {studentChoiceLastName}: ");
+                Console.Write($"Enter grade for student {studentChoiceFirstName} {studentChoiceLastName}: ");
                 string gradeInput = Console.ReadLine();
                 int grade = int.Parse(gradeInput);
 
                 //Add the grade to the student grade list
-                students[studentChoice].Grades.Add(grade); 
+                students[studentChoice].Grades.Add(grade);
+                log.AppendLine($"{DateTime.Now} - Grade {grade} added for student {studentChoiceFirstName} {studentChoiceLastName}.");
             }
 
             else
             {
-                Console.WriteLine("\nThere are no students in the system.\n");
+                var noStudentsMessage = "\nThere are no students in the system.\n";
+                log.AppendLine($"{DateTime.Now} - {noStudentsMessage}");
+                Console.WriteLine(noStudentsMessage);
             }
         }
 
