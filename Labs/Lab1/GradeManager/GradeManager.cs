@@ -37,7 +37,7 @@ namespace GradeManager
                 //or we will call log.AppendLine("log message") for line-by-line logging. This will be what we will call most of the time.
                 //For timestamps, we will interpolate DateTime.Now for each log message
 
-                log.AppendLine($"{DateTime.Now} - Starting GradeManager application.");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Starting GradeManager application.");
                 Console.WriteLine(applicationName); //Print application name on first line
                 Console.WriteLine(new String('-', applicationName.Length)); //Print line on name equal to length of application name. This is a dynamically-built string. We are creating a String object, calling the String class constructor with the new keyword. It is accepting two parameters, the first is a character to print, the second is an integer representing the count of characters to build the string. The Length property on the applicationName string gives us the integer count of applicationName so the count of dashes matches the length of the title.
                 Console.WriteLine('\n'); // Create 2 blank lines to start menu. WriteLine method call does first blank line, extra '\n' (newline character) creates second blank line (like hitting Enter twice on a keyboard).
@@ -45,24 +45,23 @@ namespace GradeManager
                 // Check for students to load
                 if (File.Exists(studentsJsonPath)) // Check if the student json exists
                 {
-                    log.AppendLine($"{DateTime.Now} - Loading file {studentsJsonPath} to check for students.");
+                    log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Loading file {studentsJsonPath} to check for students.");
                     var studentsJsonFile = File.Open(studentsJsonPath, FileMode.Open); // Open the file in memory if it exists in the specified file path.
-                    log.AppendLine($"{DateTime.Now} - File {studentsJsonPath} is {studentsJsonFile.Length} bytes in size.");
+                    log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - File {studentsJsonPath} is {studentsJsonFile.Length} bytes in size.");
 
                     if (studentsJsonFile.Length > 0 ) // Check if the file contains data (greater than 0 bytes in size), if it does, ask to load the file. 
                     {
+                        studentsJsonFile.Close(); // Close the file as data checking is now done.
                         Console.Write("Do you want to load the existing saved Students file? (Y/N)");
                         string choice = Console.ReadLine().Trim(); // ReadLine reads input, the additional Trim call eliminates any whitespace from the input.
 
                         if (choice.ToUpper() == "Y") // ToUpper method changes any y or Y to Y.
                         {
-                            log.AppendLine($"{DateTime.Now} - Closing file {studentsJsonPath} after student checking");
-                            studentsJsonFile.Close(); // Close the file so NewtonSoft.Json can read the JSON in LoadStudents
-                            log.AppendLine($"{DateTime.Now} - Loading student JSON data.");
+                            log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Closing file {studentsJsonPath} after student checking");
+                            log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Loading student JSON data.");
                             LoadStudents(); // Call Load Students
                         }
-                        // No else as there is no other alternative, so merely continue 
-                        // If you enter anything other than y or Y, it will skip
+                        
                     }
 
                     
@@ -72,7 +71,7 @@ namespace GradeManager
                 // If no students loaded from file, create new students
                 if (students == null || students.Count == 0) 
                 {
-                    log.AppendLine($"{DateTime.Now} - Creating students...");
+                    log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Creating students...");
 
                     students = new List<Student>()
                     {
@@ -89,7 +88,7 @@ namespace GradeManager
 
                     foreach (var student in students)
                     {
-                        log.AppendLine($"{DateTime.Now} - Student {student.FirstName} {student.LastName} created.");
+                        log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Student {student.FirstName} {student.LastName} created.");
                     }
                 }
 
@@ -98,19 +97,19 @@ namespace GradeManager
 
                 while (!exit) // Keep menu running after each studentChoice until application is exited. !exit checks for false (! is not operator, checks for opposite of what the current boolean value is), exit checks for true
                 {
-                    log.AppendLine($"{DateTime.Now} - Main Menu invoked.");
+                    log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Main Menu invoked.");
                     Menu();
                 }
 
                 // On application exit, write terminate message to logs, write log file, and end.
-                log.AppendLine($"{DateTime.Now} - User Application Exit. Goodbye.");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - User Application Exit. Goodbye.");
                 File.AppendAllText(logFilePath, log.ToString()); //AppendAllText rather than WriteAllText to avoid overwriting the log file each time GradeManager is run
                 Console.WriteLine($"Log file written to {logFilePath}");
             }
 
             catch (Exception ex)
             {
-                log.AppendLine($"{DateTime.Now} - Error: {ex.Message}");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Error: {ex.ToString()}");
 
                 // Write the log file
                 File.AppendAllText(logFilePath, log.ToString());
@@ -190,7 +189,7 @@ namespace GradeManager
             }
             catch (FormatException ex)
             {
-                log.AppendLine($"{DateTime.Now} - Exception Thrown - {ex.Message}");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Exception Thrown - {ex.Message}");
                 Console.WriteLine("\nInvalid input, try again.\n");
             }
             
@@ -203,22 +202,30 @@ namespace GradeManager
             var studentsJson = JsonConvert.SerializeObject(students, Formatting.Indented);
 
             //Write the JSON string to a file
-            var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; //Double \\ to escape \ for character in string
-            File.AppendAllText(path, studentsJson);
-            Console.WriteLine($"\nStudents saved to {path}.\n");
+            File.WriteAllText(studentsJsonPath, studentsJson);
+            log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Students saved to {studentsJsonPath}.");
         }
 
         private static void LoadStudents()
         {
-            var path = "C:\\Users\\Tavish\\Documents\\grademanagerstudent.json"; // File path
-            var json = File.ReadAllText(path); // Load JSON text from file
-            students = JsonConvert.DeserializeObject<List<Student>>(json); // Convert JSON text back to object
-            Console.WriteLine($"\nStudents loaded successfully from file {path}.\n");
+            try
+            {
+                var json = File.ReadAllText(studentsJsonPath); // Load JSON text from file
+                students = JsonConvert.DeserializeObject<List<Student>>(json); // Convert JSON text back to object
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Students loaded successfully from file {studentsJsonPath}.");
+            }
+
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                log.AppendLine($"Error: {ex.Message}");
+            }
+            
         }
 
         private static void PrintStudentGrades()
         {
-            log.AppendLine($"{DateTime.Now} - PrintStudentGrades called.");
+            log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - PrintStudentGrades called.");
             string header = "Student Name        Grade";
             Console.WriteLine(header);
             Console.WriteLine(new String('-', header.Length) + '\n'); // Create a new string of dashes that is the length of the header
@@ -235,7 +242,7 @@ namespace GradeManager
                     // Log the grade count for the student if they have grades
                     if (studentGradeList.Count > 0)
                     {
-                        log.AppendLine($"{DateTime.Now} - {studentGradeList.Count} grades found for student {student.FirstName} {student.LastName}");
+                        log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - {studentGradeList.Count} grades found for student {student.FirstName} {student.LastName}");
                     }
                     
 
@@ -253,7 +260,7 @@ namespace GradeManager
 
                     else
                     {
-                        log.AppendLine($"{DateTime.Now} - No grades found for student {student.FirstName} {student.LastName}.");
+                        log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - No grades found for student {student.FirstName} {student.LastName}.");
                         Console.WriteLine($"{student.FirstName} {student.LastName}        No Grades");
                     }
 
@@ -267,7 +274,7 @@ namespace GradeManager
             {
                 // Log and print the no students message
                 var noStudentsMessage = "\nThere are no students in the system.\n";
-                log.AppendLine($"{DateTime.Now} - {noStudentsMessage}");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - {noStudentsMessage}");
                 Console.WriteLine(noStudentsMessage);
             }
             
@@ -276,7 +283,7 @@ namespace GradeManager
 
         private static void AddStudentGrade()
         {
-            log.AppendFormat("{0} - AddStudentGrade called\n", DateTime.Now); //Add timestamp to log by parameter, may be more readable in certain circumstances.
+            log.AppendFormat("{0} - AddStudentGrade called\n", DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")); //Add timestamp to log by parameter, may be more readable in certain circumstances.
 
             // Check for students to add grades for
 
@@ -304,35 +311,36 @@ namespace GradeManager
                 string studentChoiceLastName = students[studentChoice].LastName;
 
                 // Log the selected student
-                log.AppendLine($"{DateTime.Now} - Student {studentChoiceFirstName} {studentChoiceLastName} selected to add grade for.");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Student {studentChoiceFirstName} {studentChoiceLastName} selected to add grade for.");
 
                 //Capture student grade from keyboard input and parse to int
                 Console.Write($"Enter grade for student {studentChoiceFirstName} {studentChoiceLastName}: ");
                 string gradeInput = Console.ReadLine();
-                int grade = int.Parse(gradeInput);
+                double grade = double.Parse(gradeInput);
 
                 //Add the grade to the student grade list
                 students[studentChoice].Grades.Add(grade);
-                log.AppendLine($"{DateTime.Now} - Grade {grade} added for student {studentChoiceFirstName} {studentChoiceLastName}.");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Grade {grade} added for student {studentChoiceFirstName} {studentChoiceLastName}.");
             }
 
             else
             {
                 var noStudentsMessage = "\nThere are no students in the system.\n";
-                log.AppendLine($"{DateTime.Now} - {noStudentsMessage}");
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - {noStudentsMessage}");
                 Console.WriteLine(noStudentsMessage);
             }
         }
 
         private static void CalculateClassAverage()
         {
+            log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - CalculateClassAverage called.");
             // Take each student grade and average them all out.
 
             // For each student, we want to add all the grades to one value and keep track of the total grade count
             // as well as the sum, as the class average would be total grade count / sum.
 
             double average = 0;
-            int gradeSum = 0;
+            double gradeSum = 0;
             int gradeCount = 0;
 
             // Loop through all the students
@@ -341,10 +349,12 @@ namespace GradeManager
                 //Compute individual averages to save to file. Since individual grades will be saved to file,
                 // Class average can be computed when loading from file.
 
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Computing average for student {student.FirstName} {student.LastName}.");
                 student.ComputeAverage(); // Compute the individual average for each student
 
                 // For each student, get each grade, add it to the gradeSum, and increment the gradeCount each time.
 
+                log.AppendLine($"{DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")} - Computing Class Average...");
                 foreach (var grade in student.Grades)
                 {
                     gradeSum += grade; // Adding the grade to the gradeSum
@@ -374,7 +384,7 @@ namespace GradeManager
 
         private static void PrintHighestGrade()
         {
-            int maxGrade = 0; //Create a variable called maxGrade to hold the current maxGrade as we loop through all the grades.
+            double maxGrade = 0; //Create a variable called maxGrade to hold the current maxGrade as we loop through all the grades.
             int count = 0; //Master grade count. If 0, then we are starting from the beginning.
             foreach (var student in students)
             {
@@ -394,7 +404,7 @@ namespace GradeManager
 
         private static void PrintLowestGrade()
         {
-            int minGrade = 0; //Create a variable called minGrade to hold the current minGrade as we loop through all the grades.
+            double minGrade = 0; //Create a variable called minGrade to hold the current minGrade as we loop through all the grades.
             int count = 0; //Master grade count. If 0, then we are starting from the beginning.
             foreach (var student in students)
             {
@@ -531,6 +541,14 @@ namespace GradeManager
 
         private static void Exit()
         {
+            Console.Write("Do you want to save student data to file? (Y/N) ");
+            var choice = Console.ReadLine().Trim();
+
+            if (choice.ToUpper() == "Y")
+            {
+                SaveStudents();
+            }
+
             Console.WriteLine("Good Bye!");
             exit = true; //Set exit to true so application will exit.
         }

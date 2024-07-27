@@ -12,7 +12,7 @@ namespace GradeManager
         public string LastName { get; set; }
 
         public double Average { get; set; } = 0; // Default to 0
-        public List<int> Grades = new List<int>(); //For lists, see: https://www.tutorialsteacher.com/csharp/csharp-list or https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0
+        public List<double> Grades = new List<double>(); //For lists, see: https://www.tutorialsteacher.com/csharp/csharp-list or https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0
 
         // Constructors: See Constructor section in Week1 code for more info
 
@@ -39,7 +39,7 @@ namespace GradeManager
         {
             double totalPoints = 0; // To keep track of total grade points to compute the average
 
-            foreach (int grade in Grades) //See ForEach in Week1 code
+            foreach (double grade in Grades) //See ForEach in Week1 code
             {
                 totalPoints += grade; // Add up all the student points for the student. This is the same as totalPoints = totalPoints + grade;
             }
