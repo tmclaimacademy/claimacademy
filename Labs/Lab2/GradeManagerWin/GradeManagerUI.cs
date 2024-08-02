@@ -17,7 +17,7 @@ namespace GradeManagerWin
 {
     public partial class GradeManagerUI : Form
     {
-        List<Student> students;
+        internal List<Student> students;
         public GradeManagerUI()
         {
             InitializeComponent();
@@ -73,16 +73,22 @@ namespace GradeManagerWin
 
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
-            var addStudentControl = new AddStudent();
+            var addStudentControl = new AddStudent(this);
             addStudentControl.Show();
             addStudentControl.Focus();
-            var newStudentFirstName = addStudentControl.ReturnFirstName();
-            var newStudentLastName = addStudentControl.ReturnLastName();
-            var student = new Student(newStudentFirstName, newStudentLastName);
-            students.Add(student);
-            var messageBoxMessage = $"New Student {newStudentFirstName} {newStudentLastName} has been added";
-            var messageBoxCaption = "New Student Added";
-            MessageBox.Show(messageBoxMessage, messageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+           
+        }
+
+        private void ShowStudentsButton_Click(object sender, EventArgs e)
+        {
+            var studentList = "Current Students: \r\n\r\n";
+
+            foreach (var student in students)
+            {
+                studentList += $"{student.FirstName} {student.LastName}\r\n";
+            }
+
+            MessageBox.Show(studentList, "Current Students", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
