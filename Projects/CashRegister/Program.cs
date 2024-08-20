@@ -32,7 +32,7 @@ namespace CashRegister
 
             // To make sales continuously, you'll need to do a menu for the sale using the switch-case block
             // This will need to be in a Menu method, and the menu will have to be continuously called until you are done
-            // making sales for the day.
+            // making sales for the day. Use the example Menu Code in the Github under Week1/MenuCode to do this.
         }
     }
 }
