@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,11 +45,114 @@ namespace Week1
             //Console.WriteLine($"The sum of {a} and {b} is {sum}.");
 
             //Creating a new Car object with Car constructor with parameters (parameterized constructor)
-            Car car = new Car("Toyota", "Corolla", 2023, "Black");
+            //Car car = new Car("Toyota", "Corolla", 2023, "Black");
 
+            // Demonstrating conditionals
+            //Conditionals();
+
+            // Demonstrating Iterations
+            Iterations();
             //Console.WriteLine("Hello World!");
             Console.ReadKey(); //Leave console window open until key is pressed
             
+        }
+
+        static void Conditionals()
+        {
+            // Recall that booleans are true and false values
+            //bool isTrue = true;
+            //bool isFalse = false;
+
+            //// These booleans are typically used to judge if-else statements.
+
+            //int x = 3;
+
+            //if (x > 5) // x > 5 evaluates to "true" since x > 5, x being 10.
+            //{
+            //    Console.WriteLine($"variable x is greater than 5. x is {x}");
+            //}
+
+            //else // Whatever is in the else block will be executed if whatever is in the parentheses in the if block is false
+            //{
+            //    Console.WriteLine($"x is not greater than 5. x is {x}");
+            //}
+
+            // Another type of conditional statement, is the "while" statement.
+            // Unlike if-else statements, which executes once for a given true-false condition, while statements continue to execute
+            // as long as the while condition is true.
+
+            //int n = 0;
+
+            //while (n == 0)
+            //{
+            //    n++; // Increment (increase by 1)
+            //    Console.WriteLine(n);
+            //}
+
+            // Another type of conditional is called a switch block. Inside the switch block, we use case statements to evaluate if something equals
+            // what is in the switch.
+
+            // For Console applications, this is useful to do a menu.
+
+            Console.Write("Enter a choice: ");
+            string enteredChoice = Console.ReadLine();
+
+            int choice = Convert.ToInt32(enteredChoice);
+
+            switch(choice)
+            {
+                case 1:
+                    Console.WriteLine("You entered 1");
+                    break; // Prevents other choices from being evaluated.
+                case 2:
+                    Console.WriteLine("You entered 2");
+                    break;
+                case 3:
+                    Console.WriteLine("You entered 3");
+                    break;
+                case 4:
+                    Console.WriteLine("You entered 4");
+                    break;
+                case 5:
+                    Console.WriteLine("You entered 5");
+                    break;
+                default: // If choice is anything not covered by above cases
+                    Console.WriteLine($"You entered {choice}");
+                    break;
+            }
+        }
+
+        static void Iterations()
+        {
+            // Iterations are loops which go through a pre-defined list or number of items
+
+            // For Loop
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"Loop has run {i} number of times.");
+            }
+
+            // Foreach loop
+            // Foreach loop runs with an array (a data list of data of all the same type) or List (a .NET class which can be used with
+            // many data types, including other classes, and has methods which has more than what an array type can offer.
+
+            // Array - A simple int array of 10 ints
+            //int[] intArray = new int[10]; // Empty array of size 10
+            //intArray[0] = 1; // arrays start from 0 rather than 1. This assigns the value to the first position, or "slot" in the array.
+
+            // However, we want to assign all 10 positions or "slots" in the array all at once
+            // We do that like this:
+
+            int[] intArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+            // NOTE: assigning all the array values at once has to be done when the array is declared.
+
+            // Now we can loop through the array with a foreach loop.
+
+            foreach (int num in intArray) // Must declare int variable to represent each int in the array and then reference the array itself with the word "in"
+            {
+                Console.WriteLine(num);
+            }
         }
 
         // Add without parameters
