@@ -74,7 +74,7 @@ namespace MenuDemo
             // Take the input
             choiceInput = Console.ReadLine();
 
-            // If choice is N
+            // If choice is anything other than Y, exit the application.
             if (choiceInput.ToUpper().Trim() != "Y") // != is not equals and == is equals
             {
                 makeAnotherChoice = false;
