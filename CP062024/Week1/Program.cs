@@ -99,7 +99,7 @@ namespace Week1
 
             int choice = Convert.ToInt32(enteredChoice);
 
-            switch(choice)
+            switch (choice)
             {
                 case 1:
                     Console.WriteLine("You entered 1");
@@ -120,6 +120,18 @@ namespace Week1
                     Console.WriteLine($"You entered {choice}");
                     break;
             }
+
+            // Other conditionals
+
+            // There are conditional operators to evaluate as to whether something is true or false
+            // && means "and"
+            // || means "or"
+            // > greater than
+            // < less than
+            // == equals
+            // != not equals
+            // ! not
+            // Example if (x > 6 && x < 12) "x is greater than 6 and x is less than 12 --> x is between 6 and 12
         }
 
         static void Iterations()
