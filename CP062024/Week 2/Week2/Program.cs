@@ -9,6 +9,7 @@ namespace Week2
     internal class Program
     {
         private static long bounty;
+        private static string Name;
         static void Main(string[] args)
         {
             // Execute this while loop while the value of bounty is less than or equal to 0.
@@ -33,6 +34,13 @@ namespace Week2
 
             Console.WriteLine($"The bounty is {GetBounty()}.");
 
+            //Set name to set sail
+            SetName("Tavish");
+
+            // Set Sail! Call the SetSail method
+            SetSail();
+
+
             Console.ReadLine(); //Keep window open
         }
 
@@ -45,6 +53,16 @@ namespace Week2
         private static long GetBounty()
         {
             return bounty;
+        }
+
+        private static void SetName(string name)
+        {
+            Name = name;
+        }
+
+        private static void SetSail()
+        {
+            Console.WriteLine($"{Name} has set sail!");
         }
     }
 }
