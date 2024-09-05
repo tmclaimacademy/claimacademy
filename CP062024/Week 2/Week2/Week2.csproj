@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Car.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="FileDemo.cs" />
     <Compile Include="Haki.cs" />
     <Compile Include="Marine.cs" />
     <Compile Include="MethodOverloading.cs" />

@@ -59,23 +59,30 @@ namespace Week2
             //Console.WriteLine($"The pirate's bounty is {pirateBounty}.");
             //Console.WriteLine($"The Marine's bounty is {marineBounty}.");
 
-            Car car = new Car(); // Create a new Car object
-            car.Drive();
+            //Car car = new Car(); // Create a new Car object
+            //car.Drive();
 
-            Car toyota = new Toyota();
-            toyota.Drive();
+            //Car toyota = new Toyota();
+            //toyota.Drive();
 
-            //Method Overloading
+            ////Method Overloading
 
-            MethodOverloading mo = new MethodOverloading();
+            //MethodOverloading mo = new MethodOverloading();
 
-            //int Add implementation
-            int intSum = mo.Add(2, 3);
-            double doubleSum = mo.Add(2.5, 4.3);
+            ////int Add implementation
+            //int intSum = mo.Add(2, 3);
+            //double doubleSum = mo.Add(2.5, 4.3);
 
-            Console.WriteLine($"int sum: {intSum}");
-            Console.WriteLine($"double sum: {doubleSum}");
+            //Console.WriteLine($"int sum: {intSum}");
+            //Console.WriteLine($"double sum: {doubleSum}");
 
+            // File Demo
+            //FileDemo fileDemo = new FileDemo();
+            //fileDemo.Run();
+
+            // Exceptions
+            Exceptions exceptions = new Exceptions();
+            exceptions.Run3();
 
             Console.ReadLine(); //Keep window open
         }
