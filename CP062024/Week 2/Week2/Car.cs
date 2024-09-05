@@ -15,6 +15,22 @@ namespace Week2
 
         public virtual string Trim { get; set; }
 
+        // Constructors
+
+
+        // Default Constructor - Every class has one but if you are defining a custom constructor,
+        // you will still need to define this by default
+        public Car()
+        {
+
+        }
+        public Car(string model, int year, string trim)
+        {
+            Model = model;
+            Year = year;
+            Trim = trim;
+        }
+
         // Virtual methods to override
 
         public virtual void Drive()
