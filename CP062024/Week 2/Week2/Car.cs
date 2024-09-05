@@ -22,10 +22,11 @@ namespace Week2
         // you will still need to define this by default
         public Car()
         {
-
+            Console.WriteLine("Creating a basic Car object.");
         }
         public Car(string model, int year, string trim)
         {
+            Console.WriteLine("Creating a Car object with parameters.");
             Model = model;
             Year = year;
             Trim = trim;
