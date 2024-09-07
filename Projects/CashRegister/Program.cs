@@ -118,6 +118,7 @@ namespace CashRegister
 
                 while (balanceDue > 100)
                 {
+                    // ExcessChargeException
                     Console.WriteLine($"{Environment.NewLine}Cannot charge more than $100 for an item!");
                     Console.Write($"{Environment.NewLine}Enter the balance due for the customer. ");
                     balanceDue = decimal.Parse(Console.ReadLine());
@@ -130,6 +131,7 @@ namespace CashRegister
 
                 while (cashGiven > 100)
                 {
+                    // ExcessFundsException
                     Console.WriteLine($"Cashier cannot accept more than $100!{Environment.NewLine}");
                     Console.Write("How much cash is the customer giving to complete the sale? ");
                     cashGiven = decimal.Parse(Console.ReadLine());
@@ -137,6 +139,7 @@ namespace CashRegister
 
                 if (cashGiven < balanceDue)
                 {
+                    //InsufficientFundsException
                     Console.WriteLine($"Insufficient funds paid! {Environment.NewLine}");
                 }
 
