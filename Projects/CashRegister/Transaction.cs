@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CashRegister
 {
     // Model class
-    internal class Transaction
+    public class Transaction
     {
         // Transaction ID to uniquely record the transaction
         public int TransactionID { get; set; }
