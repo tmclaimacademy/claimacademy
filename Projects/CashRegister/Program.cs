@@ -190,7 +190,7 @@ namespace CashRegister
         static void Exit()
         {
             exit = true; // Set exit behavior to true to terminate the application at the user's request.
-            Console.WriteLine("Good Bye! Press any key to exit.");
+            Console.WriteLine($"{Environment.NewLine}Good Bye! Press any key to exit.");
             Console.ReadKey(); // Read any key from the keyboard
         }
     }
