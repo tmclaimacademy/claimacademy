@@ -59,11 +59,11 @@ namespace Week2
             //Console.WriteLine($"The pirate's bounty is {pirateBounty}.");
             //Console.WriteLine($"The Marine's bounty is {marineBounty}.");
 
-            Car car = new Car(); // Create a new Car object
-            car.Drive();
+            //Car car = new Car(); // Create a new Car object
+            //car.Drive();
 
-            Car toyota = new Toyota("Corolla", 1998, "CE");
-            toyota.Drive();
+            //Car toyota = new Toyota("Corolla", 1998, "CE");
+            //toyota.Drive();
 
             ////Method Overloading
 
@@ -83,6 +83,11 @@ namespace Week2
             // Exceptions
             //Exceptions exceptions = new Exceptions();
             //exceptions.Run3();
+
+            //Strings
+
+            var demo = new Strings(); // Create instance of Strings class to use
+            demo.Demo(); // Run the Strings Demo
 
             Console.ReadLine(); //Keep window open
         }

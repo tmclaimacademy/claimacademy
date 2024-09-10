@@ -54,6 +54,7 @@
     <Compile Include="PirateCrew.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strings.cs" />
     <Compile Include="Toyota.cs" />
   </ItemGroup>
   <ItemGroup>
