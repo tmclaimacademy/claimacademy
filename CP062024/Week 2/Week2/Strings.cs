@@ -219,6 +219,7 @@ namespace Week2
             string testTrimmed = testWithWhiteSpace.Trim();
             doesEquals = testTrimmed.Equals("TEST"); // True
             Console.WriteLine(doesEquals);
+            
         }
 
         static string NullEmptyWhiteSpaceCheck(string testString)
