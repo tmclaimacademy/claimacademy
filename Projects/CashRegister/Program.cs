@@ -78,6 +78,7 @@ namespace CashRegister
             {
                 // Generic catch all exceptions
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ReadKey();
             }
 
 

@@ -47,6 +47,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileDemo.cs" />
     <Compile Include="Haki.cs" />
+    <Compile Include="Lists.cs" />
     <Compile Include="Marine.cs" />
     <Compile Include="MethodOverloading.cs" />
     <Compile Include="Person.cs" />

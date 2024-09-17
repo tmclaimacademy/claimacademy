@@ -86,8 +86,14 @@ namespace Week2
 
             //Strings
 
-            var demo = new Strings(); // Create instance of Strings class to use
-            demo.Demo(); // Run the Strings Demo
+            //var demo = new Strings(); // Create instance of Strings class to use
+            //demo.Demo(); // Run the Strings Demo
+
+            // Lists demo
+            var lists = new Lists();
+
+            // Run the lists Demo
+            lists.Run();
 
             Console.ReadLine(); //Keep window open
         }
