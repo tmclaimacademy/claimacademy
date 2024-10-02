@@ -22,3 +22,7 @@ function add() {
     c = a + b;
     window.alert(a + " + " + b + " = " + c);
 }
+
+function clickMe() {
+    document.getElementById("clicked").innerHTML = "Thanks for clicking!";
+}

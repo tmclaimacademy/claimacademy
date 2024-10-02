@@ -18,6 +18,9 @@ body {
     padding: 10px;
     margin: 10px;
   }
+  p:hover {
+    color: blue;
+  }
   a:link {
     color: blue;
     background-color: transparent;
