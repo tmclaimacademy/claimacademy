@@ -22,8 +22,8 @@
         <button type="submit">Send Email</button>
     </form>
 
-    <div id="response"></div>
-    <div id="error"></div>
+    <div id="response" class="response"></div>
+    <div id="error" class="error"></div>
 
     <script>
         document.getElementById('emailForm').addEventListener('submit', async function(event) {
@@ -46,7 +46,8 @@
                 const response = await fetch('https://localhost:7056/api/ContactForm', {  // Change to your API URL
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': 'https://localhost'
                     },
                     body: JSON.stringify(emailData)
                 });
