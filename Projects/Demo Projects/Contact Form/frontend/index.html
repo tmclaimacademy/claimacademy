@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Contact Us</h1>
+
+    <form id="emailForm">
+        <label for="ReplyTo">From (Email):</label><br>
+        <input type="email" id="ReplyTo" name="ReplyTo" required><br><br>
+
+        <label for="subject">Subject:</label><br>
+        <input type="text" id="subject" name="subject" required><br><br>
+
+        <label for="body">Body:</label><br>
+        <textarea id="body" name="body" rows="5" cols="33" required></textarea><br><br>
+
+        <button type="submit">Send Email</button>
+    </form>
+
+    <div id="response"></div>
+    <div id="error"></div>
+
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent the form ReplyTo submitting the traditional way
+
+            // Collect form data
+            const ReplyTo = document.getElementById('ReplyTo').value;
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('body').value;
+
+            // Prepare the payload
+            const emailData = {
+                ReplyTo: ReplyTo,
+                subject: subject,
+                body: body
+            };
+
+            try {
+                // Send the POST request using fetch
+                const response = await fetch('https://localhost:7056/api/ContactForm', {  // Change to your API URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData)
+                });
+
+                // Process the response
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById('response').innerText = 'Email sent successfully!';
+                } else {
+                    const error = await response.json();
+                    document.getElementById('response').innerText = `Error: ${error.error}`;
+                }
+            } catch (err) {
+                // Handle network errors
+                document.getElementById('response').innerText = `Network error: ${err.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
