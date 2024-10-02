@@ -57,11 +57,11 @@
                     document.getElementById('response').innerText = 'Email sent successfully!';
                 } else {
                     const error = await response.json();
-                    document.getElementById('response').innerText = `Error: ${error.error}`;
+                    document.getElementById('error').innerText = `Error: ${error.error}`;
                 }
             } catch (err) {
                 // Handle network errors
-                document.getElementById('response').innerText = `Network error: ${err.message}`;
+                document.getElementById('error').innerText = `Network error: ${err.message}`;
             }
         });
     </script>
