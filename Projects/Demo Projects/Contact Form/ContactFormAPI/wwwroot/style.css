@@ -1,0 +1,16 @@
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+button {
+    background-color: blue;
+    color: white
+}
+
+.response {
+    color: blue;
+}
+
+.error {
+    color: red;
+}

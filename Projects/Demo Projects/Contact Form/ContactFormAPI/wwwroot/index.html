@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-container w3-black">
+        <h1>Contact Us</h1>
+    </div>
+    <div class="w3-container">
+        <br />
+    <form id="emailForm">
+        <label for="Name">Your Name: </label><br />
+        <input type="text" id="name" name="name" required><br /><br />
+
+        <label for="EmailAddress">Your Email:</label><br>
+        <input type="email" id="EmailAddress" name="EmailAddress" required><br><br>
+
+        <label for="subject">Subject:</label><br>
+        <input type="text" id="subject" name="subject" required><br><br>
+
+        <label for="body">Message:</label><br>
+        <textarea id="body" name="body" rows="5" cols="33" required></textarea><br><br>
+
+        <button type="submit" class="w3-button w3-blue">Send</button>
+    </form>
+        <br />
+        <div id="response" class="w3-text-indigo"></div>
+        <div id="error" class="w3-text-red"></div>
+    </div>
+
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent the form EmailAddress submitting the traditional way
+
+            // Get all the values from the text boxes on the contact form
+            const name = document.getElementById('name').value;
+            const emailAddress = document.getElementById('EmailAddress').value;
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('body').value;
+            const url = 'https://localhost:7056/api/ContactForm';
+
+            // Package the values from the contact form into a JSON object to send to the backend API
+            const emailData = {
+                Name: name,
+                EmailAddress: emailAddress,
+                Subject: subject,
+                Body: body
+            };
+
+            try {
+                // Use JavaScript's fetch method to contact the API to POST (send) the JSON data
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData)
+                });
+
+                // Get the response and let the user know on the website whether the submission was successful or not with appropriate messaging
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById('response').innerText = "Thanks for your submission! We'll be in touch soon.";
+                    document.getElementById('name').value = '';
+                    document.getElementById('EmailAddress').value = '';
+                    document.getElementById('subject').value = '';
+                    document.getElementById('body').value = ''
+                } else {
+                    const error = await response.json();
+                    document.getElementById('error').innerText = `Error: ${error.error}`;
+                }
+            } catch (err) {
+                // Handle network errors
+                document.getElementById('error').innerText = `Network error: ${err.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
