@@ -12,6 +12,7 @@ namespace ContactFormAPI.Controllers
     [ApiController]
     public class ContactFormController : ControllerBase
     {
+        [HttpPost]
         public async Task<IActionResult> SendEmail([FromBody] Email email)
         {
             // Validate the request
