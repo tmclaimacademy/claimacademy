@@ -21,5 +21,17 @@ namespace AccessBasedWebApp.Repositories
                 connection.Execute(sql, parameters);
             }
         }
+
+        public CredentialPair RetrieveCredentials(string username)
+        {
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT * FROM dbo.CredentialPair WHERE UserName = @UserName";
+
+                // QuerySingleOrDefault returns null if no record is found, avoids exceptions
+                return connection.QuerySingleOrDefault<CredentialPair>(sql, new { UserName = username });
+            }
+        }
     }
 }
