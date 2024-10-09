@@ -1,3 +1,5 @@
+USE BikeStores;
+
 --SELECT (List) all the data in all the columns (*) 
 --FROM (source table) (the) production.brands (table)
 --ORDER BY (sort by) (the) brand_id

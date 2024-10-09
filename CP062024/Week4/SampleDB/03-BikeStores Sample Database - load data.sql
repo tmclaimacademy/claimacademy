@@ -1,3 +1,5 @@
+USE BikeStores;
+
 /*
 --------------------------------------------------------------------
 © 2017 sqlservertutorial.net All Rights Reserved
