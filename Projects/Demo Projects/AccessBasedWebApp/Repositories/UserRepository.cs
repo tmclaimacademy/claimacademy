@@ -5,32 +5,32 @@ using Dapper;
 
 namespace AccessBasedWebApp.Repositories
 {
-    public class CredentialPairRepository
+    public class UserRepository
     {
         private string _connectionString = "Server=localhost; Database=WebApp; Integrated Security=True; Encrypt=False;";
         
-        public void SaveCredentials(CredentialPair credentialPair)
+        public void SaveCredentials(User user)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = "INSERT INTO dbo.CredentialPair (UserName, PasswordHash) VALUES (@UserName, @PasswordHash);";
+                var sql = "INSERT INTO dbo.Users (UserName, PasswordHash) VALUES (@UserName, @PasswordHash);";
 
-                var parameters = new { UserName = credentialPair.UserName, PasswordHash = credentialPair.PasswordHash };
+                var parameters = new { UserName = user.UserName, PasswordHash = user.PasswordHash };
 
                 connection.Open();
                 connection.Execute(sql, parameters);
             }
         }
 
-        public CredentialPair RetrieveCredentials(string username)
+        public User GetUser(string username)
         {
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sql = "SELECT * FROM dbo.CredentialPair WHERE UserName = @UserName";
+                string sql = "SELECT * FROM dbo.Users WHERE UserName = @UserName";
 
                 // QuerySingleOrDefault returns null if no record is found, avoids exceptions
-                return connection.QuerySingleOrDefault<CredentialPair>(sql, new { UserName = username });
+                return connection.QuerySingleOrDefault<User>(sql, new { UserName = username });
             }
         }
     }

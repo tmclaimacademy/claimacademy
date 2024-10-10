@@ -13,10 +13,10 @@ namespace AccessBasedWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegistrationDetails registration)
         {
-            var credentialRepository = new CredentialPairRepository();
-            var credentialPair = credentialRepository.RetrieveCredentials(registration.UserName);
-
-            credentialRepository.SaveCredentials(credentialPair);
+            var userRepository = new UserRepository();
+            var hashedPassword = UtilityMethods.HashPassword(registration.Password);
+            var user = new User() {UserName = registration.UserName, PasswordHash = hashedPassword };
+            userRepository.SaveCredentials(user);
             return Ok(new { message = "Registration Successful" });
         }
     }

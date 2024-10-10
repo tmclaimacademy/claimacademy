@@ -12,11 +12,22 @@ namespace AccessBasedWebApp.Controllers
     {
         public async Task<IActionResult> Authenticate([FromBody] RegistrationDetails details)
         {
-            var credentialRepository = new CredentialPairRepository();
-            var credentialPair = credentialRepository.RetrieveCredentials(details.UserName);
-            var authenticated = UtilityMethods.VerifyPassword(details.Password, credentialPair.PasswordHash);
+            var userRepository = new UserRepository();
+            var userSessionRepository = new UserSessionRepository();
+            var user = userRepository.GetUser(details.UserName);
+            var authenticated = UtilityMethods.VerifyPassword(details.Password, user.PasswordHash);
             if (authenticated)
             {
+                Guid g = Guid.NewGuid();
+
+                var newSession = new UserSession()
+                {
+                    SessionID = g.ToString(),
+                    UserId = user.UserId,
+                    IsActive = true
+                };
+
+                userSessionRepository.CreateNewSession(newSession);
                 return Ok(new { message = "Authentication Successful" });
             }
 
