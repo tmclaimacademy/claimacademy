@@ -12,12 +12,23 @@ namespace AccessBasedWebApp.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sql = "INSERT INTO dbo.UserSession (SessionId, UserId, IsActive, LastActivityDateTime) VALUES (@SessionId, @UserId, @IsActive, CURRENT_TIMESTAMP);";
+                var sql = "INSERT INTO dbo.UserSessions (SessionId, UserId, IsActive, LastActivityDateTime) VALUES (@SessionId, @UserId, @IsActive, CURRENT_TIMESTAMP);";
 
-                var parameters = new { SessionId = userSession.SessionID, UserId = userSession.UserId, userSession.IsActive };
+                var parameters = new { SessionId = userSession.SessionID, UserId = userSession.UserId, IsActive = userSession.IsActive };
 
                 connection.Open();
                 connection.Execute(sql, parameters);
+            }
+        }
+
+        public UserSession GetUserSession(string sessionId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT * FROM dbo.UserSessions WHERE SessionID = @sessionId";
+
+                // QuerySingleOrDefault returns null if no record is found, avoids exceptions
+                return connection.QuerySingleOrDefault<UserSession>(sql, new { sessionId = sessionId });
             }
         }
     }

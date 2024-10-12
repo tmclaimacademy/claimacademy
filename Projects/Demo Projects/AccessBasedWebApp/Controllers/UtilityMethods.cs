@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using AccessBasedWebApp.Repositories;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AccessBasedWebApp.Controllers
@@ -84,6 +85,35 @@ namespace AccessBasedWebApp.Controllers
                 }
             }
 
+            return true;
+        }
+
+        public static bool IsActiveSession(string sessionId)
+        {
+            // An active session is one that is active and has had activity on the session in the last 12 hours.
+            var userSessionRepository = new UserSessionRepository();
+            var userSession = userSessionRepository.GetUserSession(sessionId);
+
+            // If the user session doesn't exist, then not active
+            if (userSession == null)
+            {
+                return false;
+            }
+
+            // If database indicates sessions is not active, then not active
+            if (!userSession.IsActive)
+            {
+                return false;
+            }
+
+            // If last activity was more than 12 hours in the past, then not active
+
+            if (DateTime.Compare(userSession.LastActivityDateTime, DateTime.Now.AddHours(-12))  < 0)
+            {
+                return false;
+            }
+
+            // If none of the previous conditions are met, then the session is active
             return true;
         }
     }

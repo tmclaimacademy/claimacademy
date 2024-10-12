@@ -5,10 +5,14 @@ using Dapper;
 
 namespace AccessBasedWebApp.Repositories
 {
+    // Class for connecting to database and interacting with table
     public class UserRepository
     {
+        // Connection string tells C# how to connect to the database
+        // In a real world application, this string would be in a secrets manager of sorts like AWS Secrets Manager or Vault Enterprise
         private string _connectionString = "Server=localhost; Database=WebApp; Integrated Security=True; Encrypt=False;";
         
+        // These are the repository methods. These are C# methods which run SQL, retrieve the data, and bind to the model that represents the database table.
         public void SaveCredentials(User user)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -22,7 +26,7 @@ namespace AccessBasedWebApp.Repositories
             }
         }
 
-        public User GetUser(string username)
+        public User? GetUser(string username)
         {
 
             using (var connection = new SqlConnection(_connectionString))
