@@ -1,4 +1,5 @@
-﻿using DemoApplication.Services;
+﻿using DemoApplication.Models;
+using DemoApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,6 +21,11 @@ namespace DemoApplication
         {
             // When the Register button is clicked, start the process
 
+            
+
+            // Create a new cryptography service
+            var cryptoService = new CryptoService();
+
             // Create a new registration service
             var registrationService = new RegistrationService();
 
@@ -28,20 +34,58 @@ namespace DemoApplication
             var password = Password.Text.Trim();
             var repeatPassword = RepeatPassword.Text.Trim();
 
-            // Hash the password and the repeat password, compare the hashes
-            var hashedPassword = registrationService.HashPassword(password);
-            var passwordsMatch = registrationService.VerifyPassword(repeatPassword, hashedPassword);
+            // Verify password requirements are met
+            var errorList = registrationService.VerifyRegistrationRequirements(username, password);
 
+            // Make a bulleted list of errors if there are errors
+            if (errorList.Any())
+            {
+                PasswordErrors.ForeColor = Color.Red;
+                PasswordErrors.DataSource = errorList;
+                PasswordErrors.DataBind();
+                return; // Stop running rest of code if there are password errors
+            }
+
+            // If all the password requirements are good, then clear them from the page
+            PasswordErrors.Visible = false;
+
+            // If the password requirements are met, hash the password and the repeat password, compare the hashes
+            var hashedPassword = cryptoService.HashPassword(password);
+            var passwordsMatch = cryptoService.VerifyPassword(repeatPassword, hashedPassword);
+
+            // Check if the passwords match
             if (passwordsMatch)
             {
-                RegistrationResult.Text = "Registration Successful!";
-                RegistrationResult.ForeColor = Color.Green;
+                // If the passwords match, register the user in the database
+                var result = registrationService.RegisterUser
+                    (
+                        new User
+                        {
+                            UserName = username,
+                            PasswordHash = hashedPassword
+                        }
+                    );
+
+                // If the database registration operation is successful, say registration successful, else give the error
+                if (result == "Registration Successful!")
+                {
+                    RegistrationResult.ForeColor = Color.Green;
+                    RegistrationResult.Text = result;
+                    Register.Enabled = false;
+                }
+
+                else
+                {
+                    RegistrationResult.ForeColor = Color.Red;
+                    RegistrationResult.Text = result;
+                }
+               
             }
 
             else
             {
-                RegistrationResult.Text = "Passwords Do Not Match!";
                 RegistrationResult.ForeColor = Color.Red;
+                RegistrationResult.Text = "Passwords Do Not Match!";
             }
         }
     }

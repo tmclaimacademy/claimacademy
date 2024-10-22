@@ -9,9 +9,7 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <h2>Welcome to Simple Web Forms App</h2>
-            <asp:Label ID="LabelMessage" runat="server" Text="Click the button to see a message."></asp:Label><br /><br />
-            <asp:Button ID="ButtonClickMe" runat="server" Text="Click Me!" OnClick="ButtonClickMe_Click" />
+            <h2><asp:Label ID="WelcomeMessage" runat="server"></asp:Label></h2><br /><br />
         </div>
     </form>
 </body>

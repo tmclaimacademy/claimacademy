@@ -22,6 +22,7 @@
             <asp:Button ID="Register" runat="server" Text="Register" OnClick="Register_Click" BackColor="Blue" ForeColor="White" />
             <p></p>
             <asp:Label ID="RegistrationResult" runat="server" Text=""></asp:Label>
+            <asp:BulletedList ID="PasswordErrors" runat="server"></asp:BulletedList>
         </div>
     </form>
 </body>

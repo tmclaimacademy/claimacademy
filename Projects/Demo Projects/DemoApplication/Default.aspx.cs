@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.UI;
 
 namespace SimpleWebFormsApp
@@ -7,13 +8,8 @@ namespace SimpleWebFormsApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // This runs every time the page is loaded or refreshed.
-        }
+            var userId = int.Parse(Request.QueryString["userId"]);
 
-        protected void ButtonClickMe_Click(object sender, EventArgs e)
-        {
-            // This runs when the button is clicked.
-            LabelMessage.Text = "Hello, you've clicked the button!";
         }
     }
 }

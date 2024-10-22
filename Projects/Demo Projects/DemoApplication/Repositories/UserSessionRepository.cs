@@ -1,8 +1,12 @@
-﻿using AccessBasedWebApp.Models;
-using Dapper;
+﻿using Dapper;
+using DemoApplication.Models;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
 
-namespace AccessBasedWebApp.Repositories
+namespace DemoApplication.Repositories
 {
     public class UserSessionRepository
     {
@@ -21,7 +25,7 @@ namespace AccessBasedWebApp.Repositories
             }
         }
 
-        public UserSession? GetUserSession(string sessionId)
+        public UserSession GetUserSession(string sessionId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {

@@ -11,7 +11,7 @@ namespace DemoApplication
 {
 
 
-    public partial class Registration
+    public partial class Login
     {
 
         /// <summary>
@@ -60,48 +60,30 @@ namespace DemoApplication
         protected global::System.Web.UI.WebControls.TextBox Password;
 
         /// <summary>
-        /// RepeatPasswordLabel control.
+        /// LoginButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label RepeatPasswordLabel;
+        protected global::System.Web.UI.WebControls.Button LoginButton;
 
         /// <summary>
-        /// RepeatPassword control.
+        /// LoginLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox RepeatPassword;
+        protected global::System.Web.UI.WebControls.Label LoginLabel;
 
         /// <summary>
-        /// Register control.
+        /// ErrorLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Register;
-
-        /// <summary>
-        /// RegistrationResult control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label RegistrationResult;
-
-        /// <summary>
-        /// PasswordErrors control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.BulletedList PasswordErrors;
+        protected global::System.Web.UI.WebControls.Label ErrorLabel;
     }
 }

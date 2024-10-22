@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DemoApplication.Models;
+using DemoApplication.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,86 +17,125 @@ namespace DemoApplication.Services
 
         }
 
-        public string HashPassword(string password)
+        public string RegisterUser(User user)
         {
-            // Generate a random salt
-            byte[] saltBytes = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
+            try
             {
-                rng.GetBytes(saltBytes);
+                var userRepository = new UserRepository();
+                userRepository.SaveCredentials(user);
+                return "Registration Successful!";
+            }
+            catch (Exception ex)
+            {
+                return "Error registering user";
             }
 
-            // Combine the password and the salt
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            byte[] saltedPasswordBytes = new byte[saltBytes.Length + passwordBytes.Length];
-
-            // Copy salt and password to the combined array
-            Buffer.BlockCopy(saltBytes, 0, saltedPasswordBytes, 0, saltBytes.Length);
-            Buffer.BlockCopy(passwordBytes, 0, saltedPasswordBytes, saltBytes.Length, passwordBytes.Length);
-
-            // Compute the SHA-256 hash
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashBytes = sha256.ComputeHash(saltedPasswordBytes);
-
-                // Combine the salt and the hash to store both
-                byte[] hashWithSaltBytes = new byte[saltBytes.Length + hashBytes.Length];
-                Buffer.BlockCopy(saltBytes, 0, hashWithSaltBytes, 0, saltBytes.Length);
-                Buffer.BlockCopy(hashBytes, 0, hashWithSaltBytes, saltBytes.Length, hashBytes.Length);
-
-                // Return the result as a Base64 string
-                return Convert.ToBase64String(hashWithSaltBytes);
-            }
         }
 
-        public bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        public List<string> VerifyRegistrationRequirements(string username, string password)
         {
-            // Convert the stored hashed password from Base64 string to byte array
-            byte[] hashWithSaltBytes = Convert.FromBase64String(storedHashedPassword);
+            /*
+             * Password Requirements:
+             * Must be at least 8 characters
+             * Must contain one upper case letter
+             * Must contain one lower case letter
+             * Must contain a number
+             * Must contain a special character, any of ! @ # $ % ^ & * ( )
+             * Must not contain any leading or trailing whitespace
+             */
 
-            // The salt is the first 16 bytes of the stored hashed password
-            byte[] saltBytes = new byte[16];
-            Buffer.BlockCopy(hashWithSaltBytes, 0, saltBytes, 0, saltBytes.Length);
+            // Create a list of strings that will bundle error messages as they occur
+            var errorList = new List<string>();
 
-            // The original hash is the remainder of the stored hashed password
-            byte[] storedHashBytes = new byte[hashWithSaltBytes.Length - saltBytes.Length];
-            Buffer.BlockCopy(hashWithSaltBytes, saltBytes.Length, storedHashBytes, 0, storedHashBytes.Length);
-
-            // Hash the entered password with the same salt
-            byte[] enteredPasswordBytes = Encoding.UTF8.GetBytes(enteredPassword);
-            byte[] saltedPasswordBytes = new byte[saltBytes.Length + enteredPasswordBytes.Length];
-
-            Buffer.BlockCopy(saltBytes, 0, saltedPasswordBytes, 0, saltBytes.Length);
-            Buffer.BlockCopy(enteredPasswordBytes, 0, saltedPasswordBytes, saltBytes.Length, enteredPasswordBytes.Length);
-
-            // Compute the hash of the entered password with the salt
-            using (SHA256 sha256 = SHA256.Create())
+            // Verify username is not blank
+            if (string.IsNullOrWhiteSpace(username))
             {
-                byte[] enteredHashBytes = sha256.ComputeHash(saltedPasswordBytes);
-
-                // Compare the stored hash with the computed hash
-                return CompareHashes(storedHashBytes, enteredHashBytes);
-            }
-        }
-
-        private static bool CompareHashes(byte[] storedHash, byte[] enteredHash)
-        {
-            // Ensure both hashes are the same length
-            if (storedHash.Length != enteredHash.Length)
-            {
-                return false;
+                errorList.Add("Username cannot be blank.");
             }
 
-            // Compare each byte
-            for (int i = 0; i < storedHash.Length; i++)
+            // Verify password is at least 8 characters, if not, add to the error list
+
+            if (password.Trim().Length < 8)
             {
-                if (storedHash[i] != enteredHash[i])
+                errorList.Add("Password must be at least 8 characters.");
+            }
+
+            // Verify password contains at least 1 upper case letter
+
+            var upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var letterFound = false;
+
+            foreach (var letter in password)
+            {
+                if (upperCaseLetters.Contains(letter))
                 {
-                    return false;
+                    letterFound = true; // Set flag for letterFound to true
+                    break; // If we find a letter in the password that is upper case, stop searching letters
                 }
             }
 
-            return true;
+            if (!letterFound)
+            {
+                errorList.Add("Password must contain at least one upper case letter.");
+            }
+
+            // Verify password contains at least 1 lower case letter
+            letterFound = false; // Use previous upper case letterfound for lower case, set back to false for lower case check
+
+            var lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+
+            foreach (var letter in password)
+            {
+                if (lowerCaseLetters.Contains(letter))
+                {
+                    letterFound = true; 
+                    break;
+                }
+            }
+
+            if (!letterFound)
+            {
+                errorList.Add("Password must contain at least one lower case character.");
+            }
+
+            // Verify password contains a number
+
+            var numberList = "1234567890";
+            var numberFound = false;
+
+            foreach (var c in password)
+            {
+                if (numberList.Contains(c))
+                {
+                    numberFound = true;
+                    break;
+                }
+            }
+
+            if (!numberFound)
+            {
+                errorList.Add("Password must contain at least 1 number");
+            }
+
+
+            var symbolList = "!@#$%^&*()";
+            var symbolFound = false;
+
+            foreach (var c in password)
+            {
+                if (symbolList.Contains(c))
+                {
+                    symbolFound = true;
+                    break;
+                }
+            }
+
+            if (!symbolFound)
+            {
+                errorList.Add("Password must contain one of the following special characters: ! @ # $ % ^ & * ( )");
+            }
+
+            return errorList;
         }
 
 
