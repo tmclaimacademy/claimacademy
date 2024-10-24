@@ -21,8 +21,8 @@ namespace DemoApplication.Services
         {
             try
             {
-                var userRepository = new UserRepository();
-                userRepository.SaveCredentials(user);
+                var userService = new UserService();
+                userService.AddUser(user);
                 return "Registration Successful!";
             }
             catch (Exception ex)

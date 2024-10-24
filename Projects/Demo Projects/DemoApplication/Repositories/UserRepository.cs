@@ -1,10 +1,6 @@
 ﻿using Dapper;
 using DemoApplication.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace DemoApplication.Repositories
 {
@@ -15,7 +11,7 @@ namespace DemoApplication.Repositories
         private string _connectionString = "Server=localhost; Database=WebApp; Integrated Security=True; Encrypt=False;";
 
         // These are the repository methods. These are C# methods which run SQL, retrieve the data, and bind to the model that represents the database table.
-        public void SaveCredentials(User user)
+        public void SaveUser(User user)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -28,7 +24,7 @@ namespace DemoApplication.Repositories
             }
         }
 
-        public User GetUser(string username)
+        public User GetUserByUsername(string username)
         {
 
             using (var connection = new SqlConnection(_connectionString))
@@ -37,6 +33,17 @@ namespace DemoApplication.Repositories
 
                 // QuerySingleOrDefault returns null if no record is found, avoids exceptions
                 return connection.QuerySingleOrDefault<User>(sql, new { UserName = username });
+            }
+        }
+
+        public User GetUserByUserId(int userId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT * FROM dbo.Users WHERE UserId = @UserId";
+
+                // QuerySingleOrDefault returns null if no record is found, avoids exceptions
+                return connection.QuerySingleOrDefault<User>(sql, new { UserId = userId });
             }
         }
     }

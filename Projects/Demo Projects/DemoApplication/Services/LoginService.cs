@@ -7,61 +7,53 @@ using System.Web;
 
 namespace DemoApplication.Services
 {
+    // This Login Service contains methods which perform actions needed for login.
     public class LoginService
     {
+        // Default constructor, don't need another
         public LoginService()
         {
 
         }
 
-        public bool FindUser(string username)
+        public UserSession Login(string username, string password)
         {
-            var userRepository = new UserRepository();
-            var user = userRepository.GetUser(username);
+            var userService = new UserService();
+            var cryptoService = new CryptoService();
+            var user = userService.GetUserByUsername(username);
+            UserSession nullSession = null;
 
+            // Return null user session if the user isn't found
             if (user == null)
             {
-                return false;
+                return nullSession;
             }
 
-            else
-            {
-                return true;
-            }
-
-        }
-
-        public User Login(string username, string password)
-        {
-            var userRepository = new UserRepository();
-            var userSessionRepository = new UserSessionRepository();
-            var cryptoService = new CryptoService();
-            var user = userRepository.GetUser(username);
+            // If the user is found otherwise, verify the password
             var authenticated = cryptoService.VerifyPassword(password, user.PasswordHash);
 
+            // If the user is authenticated (credentials verified against database), then create a new login session.
             if (authenticated)
             {
-                // Create the GUID
-                Guid g = Guid.NewGuid();
+                // Check for existing session
+                var userSessionService = new UserSessionService();
+                var userSession = userSessionService.GetUserSessionByUserId(user.UserId);
 
-                // Create a new user session with the GUID as the session ID, the User ID from the Users table in the database,
-                // and set IsActive to true by default as this is a new session.
-                var newSession = new UserSession()
+                // Return the existing session if it exists (do not create a new one)
+                if (userSession != null)
                 {
-                    SessionID = g.ToString(),
-                    UserId = user.UserId,
-                    IsActive = true
-                };
+                    return userSession;
+                }
 
-                // Save the new session details to the database
-                userSessionRepository.CreateNewSession(newSession);
-                return user;
-
+                // If there is no existing user session, create the new user session
+                var newSession = userSessionService.CreateNewSession(user);
+                return newSession;
             }
 
+            // If the authentication fails, return a null user session.
             else
             {
-                return null;
+                return nullSession;
             }
 
             

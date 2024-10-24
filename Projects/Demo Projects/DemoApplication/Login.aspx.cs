@@ -26,24 +26,19 @@ namespace DemoApplication
             var password = Password.Text.Trim();
             var loginService = new LoginService();
 
-            // Check if user exists
-            if (!loginService.FindUser(username))
-            {
-                ErrorLabel.Text = $"User {username} not found in system.";
-            }
-
-            // If the user exists, attempt a login
-
+            // Attempt a login with the user
             var user = loginService.Login(username, password);
 
+            // If null is returned by Login method from LoginService, then the login did not succeed
             if (user == null)
             {
                 LoginLabel.Text = "Bad Username or Password";
             }
 
+            // Otherwise, if we successfully logged in, then go to the default page with the user info.
             else
             {
-                Response.Redirect($"Default.aspx?userId={user.UserId}");
+                Response.Redirect($"Default.aspx?sessionID={user.SessionID}");
             }
 
 
