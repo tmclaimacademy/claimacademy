@@ -10,7 +10,11 @@ namespace SimpleWebFormsApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            //Get Session ID from URL
             var sessionID = Request.QueryString["sessionID"].Trim();
+
+            // Hide Logout Button by default, logout button should only appear for a valid logged in session
+            Logout.Visible = false;
 
             // Determine if the user is logged in
 
@@ -33,7 +37,18 @@ namespace SimpleWebFormsApp
             else
             {
                 WelcomeMessage.Text = $"Welcome {user.UserName}.";
+                Logout.Visible = true;
             }
+        }
+
+        
+
+        protected void Logout_Click(object sender, EventArgs e)
+        {
+            var sessionID = Request.QueryString["sessionID"].Trim();
+            var logoutService = new LogoutService();
+            logoutService.Logout(sessionID);
+            Response.Redirect($"Login.aspx?sessionID={sessionID}&logout={true}");
         }
     }
 }

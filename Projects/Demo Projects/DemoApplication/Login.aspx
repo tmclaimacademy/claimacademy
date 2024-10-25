@@ -19,6 +19,9 @@
             <asp:Button ID="LoginButton" runat="server" Text="Login" OnClick="Login_Click" BackColor="Blue" ForeColor="White" />
             <asp:Label ID="LoginLabel" runat="server" ForeColor="Green"></asp:Label>
             <asp:Label ID="ErrorLabel" runat="server" ForeColor="Red"></asp:Label>
+            <asp:Label ID="LogoutMessage" runat="server" ForeColor="Red"></asp:Label>
+            <p></p>
+            <a href="Registration.aspx">Register</a>
         </div>
     </form>
 </body>

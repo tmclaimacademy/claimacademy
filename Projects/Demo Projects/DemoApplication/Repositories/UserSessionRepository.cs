@@ -54,10 +54,10 @@ namespace DemoApplication.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sql = "SELECT * FROM dbo.UserSessions WHERE UserID = @userId";
+                string sql = "SELECT * FROM dbo.UserSessions WHERE UserID = @userId AND IsActive = @isActive";
 
                 // QuerySingleOrDefault returns null if no record is found, avoids exceptions
-                return connection.QuerySingleOrDefault<UserSession>(sql, new { userId });
+                return connection.QuerySingleOrDefault<UserSession>(sql, new {UserID = userId, IsActive = true});
             }
         }
     }

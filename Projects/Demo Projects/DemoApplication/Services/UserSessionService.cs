@@ -25,7 +25,7 @@ namespace DemoApplication.Services
              * 1. It has been more than 15 minutes since the last activity OR
              * 2. The isActive indicator is false
              */
-            var isActive = (DateTime.Now - userSession.LastActivityDateTime).TotalMinutes > 15 && userSession.IsActive == false;
+            var isActive = (DateTime.Now - userSession.LastActivityDateTime).TotalMinutes < 15 && userSession.IsActive == true;
             return isActive;
         }
 

@@ -1,6 +1,7 @@
 ﻿using DemoApplication.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,7 +13,14 @@ namespace DemoApplication
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Include this logic to check whether we are logging in for the first time or if we are logging out
+            // If we are logging out, there will be query parameters in the URL, if we are logging in for first time, there will not be
 
+            if (Request.QueryString.Count > 0)
+            {
+                // Populate the logout message
+                LogoutMessage.Text = "Logged out";
+            }
         }
 
         protected void Login_Click(object sender, EventArgs e)
@@ -32,6 +40,7 @@ namespace DemoApplication
             // If null is returned by Login method from LoginService, then the login did not succeed
             if (user == null)
             {
+                LoginLabel.ForeColor = Color.Red;
                 LoginLabel.Text = "Bad Username or Password";
             }
 
@@ -40,8 +49,6 @@ namespace DemoApplication
             {
                 Response.Redirect($"Default.aspx?sessionID={user.SessionID}");
             }
-
-
         }
     }
 }
