@@ -5,6 +5,7 @@ using System.Web;
 
 namespace DemoApplication.Models
 {
+    // Represents a User Session
     public class UserSession
     {
         public string SessionID { get; set; }

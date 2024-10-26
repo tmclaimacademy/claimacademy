@@ -9,6 +9,7 @@ using System.Web;
 
 namespace DemoApplication.Services
 {
+    // Registration Service for the Register function of the web app
     public class RegistrationService
     {
         // Default Constructor

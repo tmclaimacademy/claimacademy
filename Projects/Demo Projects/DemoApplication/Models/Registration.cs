@@ -5,6 +5,7 @@ using System.Web;
 
 namespace DemoApplication.Models
 {
+    // Represents a Registration, 3 properties below
     public class Registration
     {
         public string Username { get; set; }

@@ -14,7 +14,7 @@ namespace DemoApplication
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // No specific page load actions needed other than page loading.
         }
 
         protected void Register_Click(object sender, EventArgs e)

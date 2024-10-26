@@ -5,6 +5,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
+// Services do specific things. Your code should be organized into services based upon what each service does
+// This is the cryptoservice and contains code for hashing and salting of passwords
+// In the future, if your application requires any other additional cryptographic functionality
+// Such as encryption/decryption, that code will also go in this service.
 namespace DemoApplication.Services
 {
     public class CryptoService

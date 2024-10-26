@@ -6,6 +6,7 @@ using System.Web;
 
 namespace DemoApplication.Services
 {
+    // For logout functionality
     public class LogoutService
     {
         public LogoutService() 

@@ -2,8 +2,13 @@
 using DemoApplication.Models;
 using System.Data.SqlClient;
 
+// Repository code. These classes contain code which connect to SQL Server and pull data from the database and put it into its respective models
+// These repositories are using the Dapper ORM rather than Entity Framework, as Dapper is much more powerful than Entity Framework
+// Dapper ORM Website: https://www.learndapper.com/
+
 namespace DemoApplication.Repositories
 {
+    // User repository --> Maps dbo.Users table in SQL Database to the User model.
     public class UserRepository
     {
         // Connection string tells C# how to connect to the database

@@ -8,6 +8,7 @@ using System.Web;
 
 namespace DemoApplication.Repositories
 {
+    // Maps dbo.UserSessions table in Database to UserSession model
     public class UserSessionRepository
     {
         private string _connectionString = "Server=localhost; Database=WebApp; Integrated Security=True; Encrypt=False;";
